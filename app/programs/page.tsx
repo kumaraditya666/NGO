@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Reveal from "@/components/Reveal";
+import ProgramIcon from "@/components/ProgramIcon";
 import { SectionHeading } from "@/components/ui";
 import { getPrograms } from "@/lib/content";
 export const metadata = { title: "Our Work" };
@@ -33,7 +34,13 @@ export default async function Programs() {
         <div className="mt-8 grid gap-6 md:grid-cols-3">
           {programs.map((p) => (
             <Link key={p.id} href={`/programs/${p.slug}`} className="rounded-xl overflow-hidden border border-slate-200 bg-white hover:shadow-lg transition block">
-              <img src={p.image} alt={p.title} className="aspect-[16/10] object-cover w-full" loading="lazy" />
+              {p.image ? (
+                <img src={p.image} alt={p.title} className="aspect-[16/10] object-cover w-full" loading="lazy" />
+              ) : (
+                <span className="aspect-[16/10] w-full grid place-items-center bg-brand text-white" role="img" aria-label={`${p.title} icon`}>
+                  <ProgramIcon icon={p.icon} size={56} />
+                </span>
+              )}
               <div className="p-5">
                 <h2 className="font-sans font-bold text-xl text-ink">{p.title}</h2>
                 <p className="text-sm text-slate-600 mt-2">{p.summary}</p>

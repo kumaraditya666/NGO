@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import ProgramIcon from "@/components/ProgramIcon";
 import { getPrograms, getCampaigns, getEvents, getOpportunities, getDonations, campaignRaised } from "@/lib/content";
 import { ProgressBar, inr } from "@/components/ui";
 export const dynamic = "force-dynamic";
@@ -18,21 +19,32 @@ export default async function ProgramDetail({ params }: { params: { slug: string
     <div className="mx-auto max-w-[1240px] px-4 py-12 font-sans">
       <Link href="/programs" className="text-sm font-bold text-brand underline">← All programmes</Link>
       <h1 className="font-sans font-extrabold text-ink text-4xl md:text-5xl mt-3">{p.title}</h1>
-      <p className="mt-2 text-slate-600">{p.location}</p>
-      <img src={p.image} alt={p.title} className="mt-6 rounded-xl border border-slate-200 w-full aspect-[21/9] object-cover" />
-      <div className="mt-8 grid gap-6 md:grid-cols-2">
-        <div className="rounded-xl border border-slate-200 bg-white p-6">
-          <h2 className="font-sans font-bold text-xl text-ink">The need</h2>
-          <p className="mt-2 text-[15px] text-slate-600 leading-relaxed">{p.challenge}</p>
-          <h2 className="font-sans font-bold text-xl text-ink mt-5">Activities</h2>
-          <ul className="mt-2 list-disc pl-5 text-[15px] text-slate-600 space-y-1">{p.activities.map((a) => <li key={a}>{a}</li>)}</ul>
+      {p.location ? <p className="mt-2 text-slate-600">{p.location}</p> : null}
+      {p.image ? (
+        <img src={p.image} alt={p.title} className="mt-6 rounded-xl border border-slate-200 w-full aspect-[21/9] object-cover" />
+      ) : (
+        <div className="mt-6 rounded-xl bg-brand text-white w-full aspect-[21/9] grid place-items-center" role="img" aria-label={`${p.title} icon`}>
+          <ProgramIcon icon={p.icon} size={72} />
         </div>
+      )}
+      <p className="mt-6 text-lg text-ink/80 leading-relaxed max-w-3xl">{p.description}</p>
+      {(p.challenge || p.activities.length > 0 || p.goals.length > 0 || p.outcomes) && (
+      <div className="mt-8 grid gap-6 md:grid-cols-2">
+        {(p.challenge || p.activities.length > 0) && (
+        <div className="rounded-xl border border-slate-200 bg-white p-6">
+          {p.challenge ? (<><h2 className="font-sans font-bold text-xl text-ink">The need</h2><p className="mt-2 text-[15px] text-slate-600 leading-relaxed">{p.challenge}</p></>) : null}
+          {p.activities.length > 0 && (<><h2 className="font-sans font-bold text-xl text-ink mt-5">Activities</h2><ul className="mt-2 list-disc pl-5 text-[15px] text-slate-600 space-y-1">{p.activities.map((a) => <li key={a}>{a}</li>)}</ul></>)}
+        </div>
+        )}
+        {(p.goals.length > 0 || p.outcomes) && (
         <div className="rounded-xl border border-slate-200 bg-cream p-6">
           <h2 className="font-sans font-bold text-xl text-ink">Goals and outcomes</h2>
           <ul className="mt-2 list-disc pl-5 text-[15px] text-slate-600 space-y-1">{p.goals.map((g) => <li key={g}>{g}</li>)}</ul>
-          <p className="mt-3 text-[15px] text-slate-600">{p.outcomes}</p>
+          {p.outcomes ? <p className="mt-3 text-[15px] text-slate-600">{p.outcomes}</p> : null}
         </div>
+        )}
       </div>
+      )}
       {related.length > 0 && (
         <div className="mt-8">
           <h2 className="font-sans font-bold text-2xl text-ink">Related appeals</h2>

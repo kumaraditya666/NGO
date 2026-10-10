@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Reveal from "@/components/Reveal";
 import VideoStories from "@/components/VideoStories";
+import ProgramIcon from "@/components/ProgramIcon";
 import { OrangeStroke, SunRays, BookCurve } from "@/components/Accents";
 import { getPrograms, getGallery, getVideos } from "@/lib/content";
 
@@ -143,9 +144,10 @@ export default async function Home() {
             </h2>
             <OrangeStroke animate className="mt-3 h-[14px] w-44" />
             <p className="mt-5 text-ink/75 leading-relaxed">
-              Shikshaa Sewa Charitable Trust brings volunteers and children together
-              to learn — in reading circles, shared celebrations and everyday moments
-              of encouragement, photographed here by the team itself.
+              Shikshaa Sewa Charitable Trust serves communities through education,
+              compassion and community service. From supporting children&apos;s learning
+              to distributing essentials and raising awareness, we believe every small
+              act of kindness can create meaningful change.
             </p>
             <p className="mt-3 text-ink/75 leading-relaxed">
               {storyMain && <span className="block text-[15px]">Above: {storyMain.alt.charAt(0).toLowerCase() + storyMain.alt.slice(1)}.</span>}
@@ -158,14 +160,24 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* PUBLISHED PROGRAM PREVIEWS — only when approved programs exist */}
+      {/* PUBLISHED PROGRAM PREVIEWS — concise preview, full list on Our Work */}
       {pub.length > 0 && (
         <section aria-label="Programs" className="mx-auto max-w-[1240px] px-4 pt-14 md:pt-20">
           <Reveal>
-            <Kicker>Our Work</Kicker>
-            <h2 className="font-serif mt-3 font-semibold text-ink text-3xl md:text-[2.6rem] leading-[1.12]">
-              Programmes, plainly described
-            </h2>
+            <div className="flex flex-wrap items-end justify-between gap-3">
+              <div>
+                <Kicker>Our Work</Kicker>
+                <h2 className="font-serif mt-3 font-semibold text-ink text-3xl md:text-[2.6rem] leading-[1.12]">
+                  Where we make a difference
+                </h2>
+              </div>
+              <Link
+                href="/programs"
+                className="rounded-md border-2 border-brand px-5 py-2.5 font-sans text-sm font-bold text-brand hover:bg-brand hover:text-white transition"
+              >
+                All {pub.length} initiatives
+              </Link>
+            </div>
           </Reveal>
           <div className="mt-8 grid gap-6 md:grid-cols-3">
             {pub.slice(0, 3).map((p, i) => (
@@ -175,12 +187,18 @@ export default async function Home() {
                   className="group block h-full overflow-hidden rounded-xl bg-white border border-slate-200 hover:shadow-xl transition-shadow focus-visible:outline-2 focus-visible:outline-brand"
                 >
                   <span className="block overflow-hidden">
-                    <img
-                      src={p.image}
-                      alt={clean(p.title)}
-                      loading="lazy"
-                      className="h-52 w-full object-cover transition-transform duration-500 group-hover:scale-105 group-focus-visible:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
-                    />
+                    {p.image ? (
+                      <img
+                        src={p.image}
+                        alt={clean(p.title)}
+                        loading="lazy"
+                        className="h-52 w-full object-cover transition-transform duration-500 group-hover:scale-105 group-focus-visible:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                      />
+                    ) : (
+                      <span className="h-52 w-full grid place-items-center bg-brand text-white" role="img" aria-label={`${clean(p.title)} icon`}>
+                        <ProgramIcon icon={p.icon} size={56} />
+                      </span>
+                    )}
                   </span>
                   <span className="block p-5">
                     <span className="font-serif font-semibold text-xl text-ink leading-snug">{clean(p.title)}</span>

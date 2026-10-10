@@ -12,6 +12,8 @@ export interface Program {
   goals: string[];
   outcomes: string;
   image: string;
+  /** Simple icon key used when no matching photograph exists. */
+  icon?: string;
   state: PublishState;
   order: number;
 }
