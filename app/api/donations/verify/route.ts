@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { donationVerifySchema } from "@/lib/validation";
 import { readCollection, writeCollection, uid } from "@/lib/store";
 import { rateLimit } from "@/lib/rate-limit";
-import { enqueueNotify, processOutbox } from "@/lib/notify";
+import { enqueueNotify, processOutbox, esc } from "@/lib/notify";
 import { donationsEnabled, DONATIONS_CLOSED } from "@/lib/site";
 import type { Donation } from "@/lib/types";
 
@@ -43,7 +43,7 @@ export async function POST(req: Request) {
     refId: `${don.id}:submitted`,
     to: don.email,
     subject: `Donation ${reference} — submitted, awaiting verification`,
-    html: `<p>Hi ${don.name},</p><p>We received your reference and it is <b>awaiting payment verification</b>. We confirm only after matching the bank credit. ${dupes.length ? "Note: a similar reference exists and staff will double-check." : ""}</p>`,
+    html: `<p>Hi ${esc(don.name)},</p><p>We received your reference and it is <b>awaiting payment verification</b>. We confirm only after matching the bank credit. ${dupes.length ? "Note: a similar reference exists and staff will double-check." : ""}</p>`,
     text: `Hi ${don.name}, your reference is awaiting payment verification. We confirm only after matching the bank credit.`,
   });
   await processOutbox().catch((e) => console.error("[notify] donation-verify notice failed:", e));

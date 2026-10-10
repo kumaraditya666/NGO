@@ -1,5 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
+import { getSupabaseAdmin } from "./supabase";
+import { TABLE, orderColumn, toRow, fromRow } from "./dbmap";
 
 const DATA_DIR = path.join(process.cwd(), "data");
 
@@ -7,7 +9,56 @@ async function ensureDir() {
   await fs.mkdir(DATA_DIR, { recursive: true });
 }
 
+/** Which persistent backend serves a collection: Postgres when wired, else local JSON. */
+export function backendFor(name: string): "supabase" | "json" {
+  if (TABLE[name] && getSupabaseAdmin()) return "supabase";
+  return "json";
+}
+
+function missingTable(e: any): boolean {
+  const msg = String(e?.message || e) + " " + String(e?.code || "");
+  return /42P01|relation .* does not exist|Could not find the table/i.test(msg);
+}
+
+async function readSupabase<T>(name: string): Promise<T> {
+  const sb = getSupabaseAdmin()!;
+  const { data, error } = await sb
+    .from(TABLE[name])
+    .select("*")
+    .order(orderColumn(name), { ascending: false });
+  if (error) throw error;
+  return ((data || []).map((r) => fromRow(name, r)) as unknown) as T;
+}
+
+async function writeSupabase(name: string, value: unknown): Promise<void> {
+  const sb = getSupabaseAdmin()!;
+  const rows = (Array.isArray(value) ? value : [value]).map((r) => toRow(name, r));
+  const { error } = await sb.from(TABLE[name]).upsert(rows, { onConflict: "id" });
+  if (error) throw error;
+  // Remove rows deleted through the app (admin deletes).
+  const ids = new Set(rows.map((r) => String((r as any).id)));
+  const { data: existing, error: listError } = await sb.from(TABLE[name]).select("id");
+  if (listError) throw listError;
+  const gone = (existing || []).map((r: any) => String(r.id)).filter((id) => !ids.has(id));
+  if (gone.length > 0) {
+    const { error: delError } = await sb.from(TABLE[name]).delete().in("id", gone);
+    if (delError) throw delError;
+  }
+}
+
 export async function readCollection<T>(name: string, fallback: T): Promise<T> {
+  if (backendFor(name) === "supabase") {
+    try {
+      return await readSupabase<T>(name);
+    } catch (e) {
+      if (missingTable(e)) {
+        console.warn(`[db] table missing for "${name}" — using local store until migrations run.`);
+        // fall through to JSON
+      } else {
+        throw e;
+      }
+    }
+  }
   try {
     await ensureDir();
     const raw = await fs.readFile(path.join(DATA_DIR, `${name}.json`), "utf-8");
@@ -18,6 +69,19 @@ export async function readCollection<T>(name: string, fallback: T): Promise<T> {
 }
 
 export async function writeCollection(name: string, value: unknown): Promise<void> {
+  if (backendFor(name) === "supabase") {
+    try {
+      await writeSupabase(name, value);
+      return;
+    } catch (e) {
+      if (missingTable(e)) {
+        console.warn(`[db] table missing for "${name}" — using local store until migrations run.`);
+        // fall through to JSON
+      } else {
+        throw e;
+      }
+    }
+  }
   await ensureDir();
   const tmp = path.join(DATA_DIR, `${name}.json.tmp`);
   const dest = path.join(DATA_DIR, `${name}.json`);

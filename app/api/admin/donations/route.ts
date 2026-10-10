@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { requireApiRole } from "@/lib/guard";
 import { readCollection, writeCollection, uid, acknowledgementNo } from "@/lib/store";
 import { logAudit } from "@/lib/audit";
-import { adminRecipient, enqueueNotify, processOutbox, siteBase, inboxLink } from "@/lib/notify";
+import { adminRecipient, enqueueNotify, processOutbox, siteBase, inboxLink, esc } from "@/lib/notify";
 import type { Donation } from "@/lib/types";
 
 export async function GET(req: Request) {
@@ -55,24 +55,22 @@ export async function POST(req: Request) {
         refId: `${d.id}:confirmed`,
         to: d.email,
         subject: `Donation ${d.reference} confirmed — thank you`,
-        html: `<p>Hi ${d.name},</p><p>Your donation of ₹${d.verifiedAmount} (ref ${d.reference}) has been <b>confirmed</b> after verification. Acknowledgement no: ${(d as any).ackNumber}. This is an acknowledgement, not a tax certificate.</p>`,
+        html: `<p>Hi ${esc(d.name)},</p><p>Your donation of ₹${d.verifiedAmount} (ref ${d.reference}) has been <b>confirmed</b> after verification. Acknowledgement no: ${esc((d as any).ackNumber)}. This is an acknowledgement, not a tax certificate.</p>`,
         text: `Hi ${d.name}, your donation of Rs.${d.verifiedAmount} (ref ${d.reference}) has been confirmed after verification. Acknowledgement no: ${(d as any).ackNumber}. This is an acknowledgement, not a tax certificate.`,
       });
     }
     // Staff notification ONLY after this server-side verification — never before.
     try {
       const admin = await adminRecipient();
-      if (admin) {
-        await enqueueNotify({
-          purpose: "admin-notify",
-          refKind: "donations",
-          refId: `${d.id}:confirmed`,
-          to: admin,
-          subject: `Donation confirmed — Shikshaa Sewa (${d.reference})`,
-          html: `<p>Verified by ${g.session.email} on ${d.reviewedAt}.</p><p><b>${d.name}</b> · Rs.${d.verifiedAmount} · ref ${d.reference} · UTR withheld (see dashboard).</p><p>Review: <a href="${siteBase()}${inboxLink("donations")}">${siteBase()}${inboxLink("donations")}</a></p>`,
+      await enqueueNotify({
+        purpose: "admin-notify",
+        refKind: "donations",
+        refId: `${d.id}:confirmed`,
+        to: admin,
+        subject: `Donation confirmed — Shikshaa Sewa (${d.reference})`,
+          html: `<p>Verified by ${esc(g.session.email)} on ${d.reviewedAt}.</p><p><b>${esc(d.name)}</b> · Rs.${d.verifiedAmount} · ref ${d.reference} · UTR withheld (see dashboard).</p><p>Review: <a href="${siteBase()}${inboxLink("donations")}">${siteBase()}${inboxLink("donations")}</a></p>`,
           text: `Confirmed by ${g.session.email} on ${d.reviewedAt}: ${d.name}, Rs.${d.verifiedAmount}, ref ${d.reference}. UTR withheld — see dashboard. Review: ${siteBase()}${inboxLink("donations")}`,
         });
-      }
       await processOutbox();
     } catch (e) {
       console.error("[notify] donation-confirm notification failed (decision saved):", e);
@@ -89,7 +87,7 @@ export async function POST(req: Request) {
         refId: `${d.id}:rejected`,
         to: d.email,
         subject: `Donation ${d.reference} — needs attention`,
-        html: `<p>Hi ${d.name},</p><p>We could not verify your payment (ref ${d.reference}). Reason: ${note || "no matching bank credit"}. Please reply with your payment proof.</p>`,
+        html: `<p>Hi ${esc(d.name)},</p><p>We could not verify your payment (ref ${d.reference}). Reason: ${esc(note || "no matching bank credit")}. Please reply with your payment proof.</p>`,
         text: `Hi ${d.name}, we could not verify your payment (ref ${d.reference}). Reason: ${note || "no matching bank credit"}. Please reply with your payment proof.`,
       });
       await processOutbox().catch((e) => console.error("[notify] donation-reject notification failed:", e));

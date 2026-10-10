@@ -38,7 +38,16 @@ export async function adminRecipient(): Promise<string> {
 }
 
 export function siteBase(): string {
-  return process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  return process.env.APP_URL || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+}
+
+/** Escape user-supplied text for HTML email bodies. */
+export function esc(v: unknown): string {
+  return String(v ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
 }
 
 function keyFor(purpose: NotifyPurpose, refKind: string, refId: string): string {
@@ -108,7 +117,8 @@ export async function processOutbox(limit = 5): Promise<{ processed: number; sen
     job.updatedAt = new Date().toISOString();
     await writeCollection("outbox", jobs);
     try {
-      if (!emailConfigured) throw new Error("email provider not configured (SMTP_HOST/USER/PASS missing)");
+      if (!job.to || !job.to.includes("@")) throw new Error("no admin recipient configured (set ADMIN_NOTIFICATION_EMAIL or Settings > adminNotificationEmail)");
+      if (!emailConfigured && !process.env.RESEND_API_KEY) throw new Error("email provider not configured (set RESEND_API_KEY or SMTP_HOST/USER/PASS)");
       const info = await sendMail({ to: job.to, subject: job.subject, html: job.html, text: job.text, replyTo: job.replyTo });
       if (info.demo) throw new Error("email provider not configured (demo mode)");
       job.status = "sent";

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { volunteerSchema } from "@/lib/validation";
 import { readCollection, writeCollection, uid } from "@/lib/store";
 import { rateLimit } from "@/lib/rate-limit";
-import { adminRecipient, enqueueNotify, processOutbox, siteBase, inboxLink } from "@/lib/notify";
+import { adminRecipient, enqueueNotify, processOutbox, siteBase, inboxLink, esc } from "@/lib/notify";
 
 export async function POST(req: Request) {
   if (!rateLimit("vol:" + (req.headers.get("x-forwarded-for") || "a"), 10)) return NextResponse.json({ error: "Too many requests" }, { status: 429 });
@@ -32,18 +32,16 @@ export async function POST(req: Request) {
     try {
       const email = (p.data.email || "").trim();
       const admin = await adminRecipient();
-      if (admin) {
-        await enqueueNotify({
-          purpose: "admin-notify",
-          refKind: "volunteers",
-          refId: rec.id,
-          to: admin,
-          subject: `New volunteer application — Shikshaa Sewa (${rec.id})`,
-          html: `<p>New volunteer application on ${now}.</p><p><b>${p.data.name}</b> · ${p.data.email || "no email"} · ${p.data.phone || "no phone"} · ${p.data.location || "no area"}</p><p>Interests: ${p.data.interests || "—"}</p><p>Availability: ${p.data.availability || "—"}</p><p>Review: <a href="${siteBase()}${inboxLink("volunteers")}">${siteBase()}${inboxLink("volunteers")}</a></p>`,
-          text: `New volunteer application (${rec.id}) on ${now}.\n${p.data.name} · ${p.data.email || "no email"} · ${p.data.phone || "no phone"}\nReview: ${siteBase()}${inboxLink("volunteers")}`,
-          replyTo: (p.data.email || "").trim() || undefined,
-        });
-      }
+      await enqueueNotify({
+        purpose: "admin-notify",
+        refKind: "volunteers",
+        refId: rec.id,
+        to: admin,
+        subject: `New volunteer application — Shikshaa Sewa (${rec.id})`,
+        html: `<p>New volunteer application on ${now}.</p><p><b>${esc(p.data.name)}</b> · ${esc(p.data.email) || "no email"} · ${esc(p.data.phone) || "no phone"} · ${esc(p.data.location) || "no area"}</p><p>Interests: ${esc(p.data.interests) || "—"}</p><p>Availability: ${esc(p.data.availability) || "—"}</p><p>Review: <a href="${siteBase()}${inboxLink("volunteers")}">${siteBase()}${inboxLink("volunteers")}</a></p>`,
+        text: `New volunteer application (${rec.id}) on ${now}.\n${p.data.name} · ${p.data.email || "no email"} · ${p.data.phone || "no phone"}\nReview: ${siteBase()}${inboxLink("volunteers")}`,
+        replyTo: (p.data.email || "").trim() || undefined,
+      });
       if (email) {
         await enqueueNotify({
           purpose: "submitter-ack",
@@ -51,7 +49,7 @@ export async function POST(req: Request) {
           refId: rec.id,
           to: email,
           subject: "Volunteer application received — Shikshaa Sewa",
-          html: `<p>Hi ${p.data.name},</p><p>Thanks — your application (${rec.id}) is saved and our team reviews every application by hand.</p>`,
+          html: `<p>Hi ${esc(p.data.name)},</p><p>Thanks — your application (${rec.id}) is saved and our team reviews every application by hand.</p>`,
           text: `Hi ${p.data.name}, thanks — your application (${rec.id}) is saved and our team reviews every application by hand.`,
         });
       }

@@ -39,6 +39,14 @@ function InboxInner() {
   const [openId, setOpenId] = useState<string | null>(null);
   const [note, setNote] = useState("");
   const [msg, setMsg] = useState("");
+  const [mail, setMail] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (!openId) { setMail([]); return; }
+    fetch(`/api/admin/notifications?refId=${encodeURIComponent(openId)}`)
+      .then(async (r) => (r.ok ? setMail((await r.json()).jobs || []) : setMail([])))
+      .catch(() => setMail([]));
+  }, [openId]);
 
   async function load(k = kind) {
     setState("loading");
@@ -160,6 +168,21 @@ function InboxInner() {
               {open.reviewedBy && <div className="grid md:grid-cols-[140px_1fr] gap-1 border-b pb-1"><dt className="text-forest-muted">Last review</dt><dd>{open.reviewedBy} · {open.reviewedAt}</dd></div>}
             </dl>
             <div className="mt-4 grid gap-3">
+              <div className="rounded-xl bg-parchment/60 border border-forest/10 p-3 text-sm">
+                <p className="font-medium">Email notifications</p>
+                {mail.length === 0 ? (
+                  <p className="text-forest-muted mt-1">No notification jobs for this record yet.</p>
+                ) : (
+                  <ul className="mt-1 space-y-1">
+                    {mail.map((m: any) => (
+                      <li key={m.id}>
+                        {m.purpose === "admin-notify" ? "Staff alert" : "Submitter acknowledgement"} to {m.to} — <strong>{m.status}</strong>
+                        {m.lastError && m.status !== "sent" ? <span className="text-forest-muted"> ({m.lastError})</span> : null}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
               <label className="grid gap-1 text-sm font-medium">Status
                 <select value={open.status || "new"} onChange={(e) => save(open.id, { status: e.target.value })} className="border rounded-xl px-3 py-2 bg-white font-normal">
                   {meta.statuses.map((s) => <option key={s} value={s}>{s}</option>)}

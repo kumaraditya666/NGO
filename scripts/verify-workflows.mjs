@@ -135,7 +135,7 @@ async function main() {
   const jobs = (await j(r)).jobs || [];
   const mine = jobs.filter((x) => x.refId === jv.id);
   ok("J2 outbox jobs recorded for the submission", mine.length >= 1, `jobs=${mine.length}`);
-  ok("J3 unconfigured mail recorded as failed (never fake-sent)", mine.length > 0 && mine.every((x) => x.status === "failed" && /not configured/i.test(x.lastError || "")));
+  ok("J3 unconfigured mail recorded as failed (never fake-sent)", mine.length > 0 && mine.every((x) => x.status === "failed" && /not configured|no admin recipient/i.test(x.lastError || "")));
   const before = mine.length;
   if (mine.length > 0) {
     r = await fetch(`${BASE}/api/admin/notifications`, { method: "POST", headers: HJ, body: JSON.stringify({ id: mine[0].id }) });
@@ -171,6 +171,18 @@ async function main() {
   ok("I footer admin login link", /\/admin\/login/.test(homeHtml));
   r = await fetch(`${BASE}/api/events/register`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ eventId: "nope", name: "Xyz", email: "x@y.co", consent: true }) });
   ok("I bad event rejected", r.status === 404);
+
+  // K. escaping, per-record lookup, cron guard
+  const xssName = "<b>XSS-" + T + "</b>";
+  r = await fetch(`${BASE}/api/volunteer`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: xssName, email: `xss-${T}@test.co`, consent: true }) });
+  const xv = await j(r);
+  r = await fetch(`${BASE}/api/admin/notifications?refId=${xv.id}`, { headers: H });
+  const xj = (await j(r)).jobs || [];
+  const xAdmin = xj.find((x) => x.purpose === "admin-notify");
+  ok("K1 user content escaped in stored email HTML", r.ok && !!xAdmin && xAdmin.html.includes("&lt;b&gt;") && !xAdmin.html.includes("<b>XSS-"));
+  ok("K2 notifications filterable by record", r.ok && xj.length >= 1);
+  r = await fetch(`${BASE}/api/cron/outbox`);
+  ok("K3 cron requires secret", r.status === 401);
 
   console.log(`\n${pass} passed, ${fail} failed`);
   process.exit(fail ? 1 : 0);

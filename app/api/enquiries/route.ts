@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { enquirySchema } from "@/lib/validation";
 import { readCollection, writeCollection, uid } from "@/lib/store";
 import { rateLimit } from "@/lib/rate-limit";
-import { adminRecipient, enqueueNotify, processOutbox, siteBase, inboxLink } from "@/lib/notify";
+import { adminRecipient, enqueueNotify, processOutbox, siteBase, inboxLink, esc } from "@/lib/notify";
 
 const KIND_LABEL: Record<string, string> = {
   contact: "contact enquiry",
@@ -43,25 +43,23 @@ export async function POST(req: Request) {
     try {
       const label = KIND_LABEL[p.data.kind] || "enquiry";
       const admin = await adminRecipient();
-      if (admin) {
-        await enqueueNotify({
-          purpose: "admin-notify",
-          refKind: p.data.kind,
-          refId: rec.id,
-          to: admin,
-          subject: `New ${label} — Shikshaa Sewa (${rec.id})`,
-          html: `<p>New ${label} on ${now}.</p><p><b>${p.data.name}</b> · ${p.data.email}${p.data.phone ? ` · ${p.data.phone}` : ""}</p>${p.data.subject ? `<p>Subject: ${p.data.subject}</p>` : ""}<p>${(p.data.message || "").slice(0, 500)}</p><p>Review: <a href="${siteBase()}${inboxLink(p.data.kind)}">${siteBase()}${inboxLink(p.data.kind)}</a></p>`,
-          text: `New ${label} (${rec.id}) on ${now}.\n${p.data.name} · ${p.data.email}\n${(p.data.message || "").slice(0, 500)}\nReview: ${siteBase()}${inboxLink(p.data.kind)}`,
-          replyTo: p.data.email,
-        });
-      }
+      await enqueueNotify({
+        purpose: "admin-notify",
+        refKind: p.data.kind,
+        refId: rec.id,
+        to: admin,
+        subject: `New ${label} — Shikshaa Sewa (${rec.id})`,
+        html: `<p>New ${label} on ${now}.</p><p><b>${esc(p.data.name)}</b> · ${esc(p.data.email)}${p.data.phone ? ` · ${esc(p.data.phone)}` : ""}</p>${p.data.subject ? `<p>Subject: ${esc(p.data.subject)}</p>` : ""}<p>${esc((p.data.message || "").slice(0, 500))}</p><p>Review: <a href="${siteBase()}${inboxLink(p.data.kind)}">${siteBase()}${inboxLink(p.data.kind)}</a></p>`,
+        text: `New ${label} (${rec.id}) on ${now}.\n${p.data.name} · ${p.data.email}\n${(p.data.message || "").slice(0, 500)}\nReview: ${siteBase()}${inboxLink(p.data.kind)}`,
+        replyTo: p.data.email,
+      });
       await enqueueNotify({
         purpose: "submitter-ack",
         refKind: p.data.kind,
         refId: rec.id,
         to: p.data.email,
         subject: "We received your message — Shikshaa Sewa",
-        html: `<p>Hi ${p.data.name},</p><p>Thanks for writing — your message (${rec.id}) is saved and we reply within 3 working days.</p>`,
+          html: `<p>Hi ${esc(p.data.name)},</p><p>Thanks for writing — your message (${rec.id}) is saved and we reply within 3 working days.</p>`,
         text: `Hi ${p.data.name}, thanks for writing — your message (${rec.id}) is saved and we reply within 3 working days.`,
       });
       await processOutbox();

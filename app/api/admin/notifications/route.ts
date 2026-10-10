@@ -10,8 +10,10 @@ export async function GET(req: Request) {
   if ("error" in g) return g.error;
   const url = new URL(req.url);
   const status = url.searchParams.get("status") || "";
+  const refId = url.searchParams.get("refId") || "";
   let jobs = await readCollection<NotifyJob[]>("outbox", []);
   if (status) jobs = jobs.filter((j) => j.status === status);
+  if (refId) jobs = jobs.filter((j) => j.refId === refId);
   jobs = [...jobs].sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
   return NextResponse.json({ jobs: jobs.slice(0, 200), count: jobs.length });
 }

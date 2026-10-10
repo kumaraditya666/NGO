@@ -5,6 +5,7 @@ import { sendMail } from "@/lib/email";
 import { emailConfigured } from "@/lib/config";
 import { rateLimit } from "@/lib/rate-limit";
 import type { StaffUser } from "@/lib/auth";
+import { esc } from "@/lib/notify";
 
 // Self-service reset request. Always responds generically; a token is issued
 // and emailed only when the account exists AND email delivery is configured.
@@ -31,7 +32,7 @@ export async function POST(req: Request) {
     await sendMail({
       to: u.email,
       subject: "Reset your admin password",
-      html: `<p>Hi ${u.name},</p><p>A password reset was requested. This link works for one hour:</p><p><a href="${base}/admin/reset?token=${token}">${base}/admin/reset?token=${token}</a></p><p>If you did not ask for this, ignore this email.</p>`,
+      html: `<p>Hi ${esc(u.name)},</p><p>A password reset was requested. This link works for one hour:</p><p><a href="${base}/admin/reset?token=${token}">${base}/admin/reset?token=${token}</a></p><p>If you did not ask for this, ignore this email.</p>`,
     });
   }
   return NextResponse.json({
