@@ -71,6 +71,27 @@ body {
 .enter-hero-sub { animation: enter-rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.5s both; }
 .enter-hero-cta { animation: enter-rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.65s both; }
 
+/* magazine-hero collage pieces */
+.enter-photo-main { animation: enter-settle 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both; }
+.enter-photo-1 { animation: enter-rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.45s both; }
+.enter-photo-2 { animation: enter-rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.6s both; }
+.enter-underline path {
+  stroke-dasharray: 320;
+  stroke-dashoffset: 320;
+  animation: draw-stroke 0.55s ease-out 0.85s forwards;
+}
+@keyframes draw-stroke {
+  to { stroke-dashoffset: 0; }
+}
+/* section accent strokes draw when their Reveal fires */
+.accent-draw path {
+  stroke-dasharray: 320;
+  stroke-dashoffset: 320;
+}
+.reveal[data-visible="true"] .accent-draw path {
+  animation: draw-stroke 0.7s ease-out 0.15s forwards;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -85,10 +106,16 @@ body {
   .enter-hero-kicker,
   .enter-hero-title,
   .enter-hero-sub,
-  .enter-hero-cta {
+  .enter-hero-cta,
+  .enter-photo-main,
+  .enter-photo-1,
+  .enter-photo-2,
+  .enter-underline path,
+  .accent-draw path {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;
+    stroke-dashoffset: 0 !important;
   }
   * {
     animation: none !important;
