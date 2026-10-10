@@ -173,10 +173,12 @@ export interface GalleryItem {
 export interface VideoItem {
   id: string;
   title: string;
+  /** Optional short caption shown under the title. */
+  caption?: string;
   /** Uploaded cover image path (do not hotlink platform thumbnails). */
   cover: string;
   coverAlt: string;
-  /** Exact video/reel URL (https only). */
+  /** Exact video/reel URL (https only, supported platforms only). */
   url: string;
   platform: "instagram" | "youtube" | "other";
   order?: number;

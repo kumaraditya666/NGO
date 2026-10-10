@@ -45,7 +45,7 @@ export default function Header() {
     path === h ? "text-brand" : "text-slate-700 hover:text-brand-dark";
 
   return (
-    <header className="sticky top-0 z-40 bg-white border-b border-slate-200">
+    <header className="enter-header sticky top-0 z-40 bg-white border-b border-slate-200">
       <div className="mx-auto max-w-[1240px] px-4 flex items-center justify-between h-[68px] gap-4">
         <Link href="/" className="flex items-center gap-2.5 shrink-0" aria-label="Shikshaa Sewa Charitable Trust — home">
           <img
@@ -57,9 +57,6 @@ export default function Header() {
             <span className="block font-sans font-extrabold text-[18px] text-ink">Shikshaa Sewa</span>
             <span className="block text-[10px] font-sans font-bold uppercase tracking-[0.14em] text-slate-500">
               Charitable Trust
-            </span>
-            <span className="hidden xl:block text-[10.5px] font-sans italic text-slate-500">
-              Learn today, lead tomorrow
             </span>
           </span>
         </Link>

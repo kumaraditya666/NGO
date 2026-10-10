@@ -37,36 +37,33 @@ export default async function Home() {
 
   return (
     <div className="bg-white font-sans">
-      {/* HERO — one strong client photograph */}
+      {/* HERO — client photograph of learning, slogan headline */}
       <section className="relative bg-slate-950 overflow-hidden" aria-label="Introduction">
         <div className="relative h-[540px] md:h-[620px]">
           <img
-            src="/images/gallery/large/13271238-bf80-47c0-9a26-654b2f894d7a.jpg"
-            alt="Volunteers and children holding small Indian flags outside a building"
-            className="h-full w-full object-cover"
-            style={{ objectPosition: "50% 35%" }}
+            src="/images/gallery/large/84ae442b-4d94-4cb7-87fc-2922382d13ee.jpg"
+            alt="Children studying with notebooks on a mat while a tutor writes beside them"
+            loading="eager"
+            className="enter-hero-img h-full w-full object-cover md:object-[30%_50%]"
           />
           <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-black/10 md:bg-none" />
           <div aria-hidden className="absolute inset-0 hidden md:block bg-gradient-to-l from-black/75 via-black/30 to-transparent" />
           <div className="absolute inset-0">
             <div className="mx-auto max-w-[1240px] px-5 h-full flex items-end pb-16 md:pb-0 md:items-center md:justify-end">
               <div className="max-w-xl md:pr-6">
-                <p className="font-sans text-[12px] font-bold uppercase tracking-[0.24em] text-accent">
+                <p className="enter-hero-kicker font-sans text-[12px] font-bold uppercase tracking-[0.24em] text-accent">
                   Shikshaa Sewa · India
                 </p>
-                <h1 className="font-sans mt-3 font-extrabold text-white text-[2rem] md:text-6xl leading-[1.05]">
-                  Together, we can
+                <h1 className="enter-hero-title font-sans mt-3 font-extrabold text-white text-[2rem] md:text-6xl leading-[1.08]">
+                  Learn today,
                   <br />
-                  change lives.
+                  lead tomorrow.
                 </h1>
-                <p className="mt-4 text-white/85 font-sans text-[15px] md:text-lg max-w-md">
-                  A community-rooted nonprofit in India. Neighbours lead the work — and every
-                  photograph here is from the team itself.
+                <p className="enter-hero-sub mt-4 text-white/85 font-sans text-[15px] md:text-lg max-w-md">
+                  A community-rooted nonprofit in India — explore the work, or join it
+                  as a volunteer.
                 </p>
-                <p className="mt-2 font-sans italic text-white/75 text-[15px] md:text-base">
-                  Learn today, lead tomorrow.
-                </p>
-                <div className="mt-6">
+                <div className="enter-hero-cta mt-6">
                   <Link
                     href="/volunteer"
                     className="inline-block rounded-md bg-accent px-9 py-3.5 font-sans font-bold text-ink hover:bg-accent-deep hover:text-white transition"
@@ -237,8 +234,10 @@ export default async function Home() {
             <h2 className="font-sans mt-2 font-extrabold text-ink text-3xl md:text-4xl">
               Stories from Our Work
             </h2>
+            <div aria-hidden className="mt-3 h-1 w-16 rounded-full bg-accent" />
             <p className="mt-3 text-slate-600 max-w-2xl">
-              Short videos and reels from the field. Each card opens the exact video in a new tab.
+              Short videos and reels from the field. YouTube videos play here on click;
+              reels open on Instagram in a new tab.
             </p>
           </Reveal>
           <div className="mt-7">
