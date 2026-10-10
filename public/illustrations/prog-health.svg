@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600" role="img" aria-label="Illustration of a health camp tent">
+<rect width="800" height="600" fill="#F7EFE3"/>
+<rect y="460" width="800" height="140" fill="#2E4A35"/>
+<polygon points="400,120 140,340 660,340" fill="#FDF8F1"/>
+<polygon points="400,120 320,340 400,340" fill="#C65D3B" opacity="0.85"/>
+<polygon points="400,120 480,340 400,340" fill="#C65D3B" opacity="0.85"/>
+<rect x="140" y="340" width="520" height="16" fill="#1A2E1F"/>
+<circle cx="400" cy="250" r="44" fill="#1A2E1F"/>
+<rect x="384" y="222" width="32" height="56" rx="6" fill="#FDF8F1"/>
+<rect x="372" y="234" width="56" height="32" rx="6" fill="#FDF8F1"/>
+<rect x="220" y="400" width="120" height="60" rx="10" fill="#FDF8F1"/>
+<rect x="220" y="400" width="120" height="14" rx="7" fill="#C9A86A"/>
+<rect x="470" y="400" width="120" height="60" rx="10" fill="#FDF8F1"/>
+<rect x="470" y="400" width="120" height="14" rx="7" fill="#C65D3B"/>
+<circle cx="180" cy="430" r="24" fill="#C65D3B"/>
+<rect x="160" y="456" width="40" height="60" rx="14" fill="#1A2E1F"/>
+<circle cx="630" cy="430" r="24" fill="#1A2E1F"/>
+<rect x="610" y="456" width="40" height="60" rx="14" fill="#C65D3B"/>
+<circle cx="660" cy="120" r="55" fill="#C9A86A" opacity="0.7"/>
+</svg>

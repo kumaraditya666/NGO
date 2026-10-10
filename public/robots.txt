@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /donate/status
+Disallow: /donate/ack
+Disallow: /api/

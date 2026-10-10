@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800" role="img" aria-label="Illustration of sunrise over homes">
+<rect width="800" height="800" fill="#1A2E1F"/>
+<circle cx="400" cy="430" r="150" fill="#C65D3B"/>
+<circle cx="400" cy="430" r="210" fill="#C65D3B" opacity="0.3"/>
+<rect y="430" width="800" height="370" fill="#0E1A11"/>
+<g fill="#FDF8F1">
+<rect x="90" y="520" width="150" height="110" rx="6"/>
+<polygon points="80,520 165,460 250,520" />
+<rect x="330" y="540" width="170" height="120" rx="6"/>
+<polygon points="318,540 415,470 512,540" />
+<rect x="580" y="520" width="140" height="110" rx="6"/>
+<polygon points="570,520 650,465 730,520" />
+</g>
+<g fill="#C9A86A">
+<rect x="150" y="560" width="32" height="70" />
+<rect x="400" y="585" width="36" height="75" />
+<rect x="630" y="560" width="30" height="70" />
+</g>
+<g stroke="#FDF8F1" stroke-width="8" stroke-linecap="round" fill="none" opacity="0.85">
+<path d="M180 220 q18 -18 36 0 q18 -18 36 0"/>
+<path d="M560 180 q18 -18 36 0 q18 -18 36 0"/>
+<path d="M380 140 q14 -14 28 0 q14 -14 28 0"/>
+</g>
+</svg>

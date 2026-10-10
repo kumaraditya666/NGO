@@ -1,0 +1,6 @@
+node_modules
+.next
+data/proofs
+.env.local
+server.log
+tsconfig.tsbuildinfo

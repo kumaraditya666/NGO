@@ -1,0 +1,5 @@
+[
+  { "id": "faq1", "q": "How do I donate?", "a": "Choose an amount on the Donate page, pay via the verified UPI QR or bank details, then submit your UTR/reference. Staff verify every credit before confirming." },
+  { "id": "faq2", "q": "Do I get a tax receipt?", "a": "We issue an acknowledgement for every confirmed donation. Any tax-specific wording must be supplied and approved by the client — do not assume a deduction." },
+  { "id": "faq3", "q": "Can I volunteer remotely?", "a": "Yes — mention your skills and availability in the volunteer form and the team will match you." }
+]

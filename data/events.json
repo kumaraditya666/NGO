@@ -1,0 +1,32 @@
+[
+  {
+    "id": "evt_camp",
+    "slug": "health-camp-nov",
+    "title": "Community Health Camp (sample)",
+    "description": "Free screening, medicines and referrals. Walk-ins welcome; registration helps us plan.",
+    "date": "2026-11-16",
+    "time": "09:00–13:00 IST",
+    "location": "Community Hall, [LOCATION]",
+    "mapUrl": "https://maps.google.com/?q=India",
+    "capacity": 120,
+    "registered": 0,
+    "image": "/placeholders/program-health.svg",
+    "state": "upcoming",
+    "publish": "published"
+  },
+  {
+    "id": "evt_plant",
+    "slug": "plantation-drive",
+    "title": "Monsoon Plantation Drive (sample)",
+    "description": "Native saplings along the school lane with resident groups.",
+    "date": "2026-07-05",
+    "time": "07:00–10:00 IST",
+    "location": "School Lane, [LOCATION]",
+    "mapUrl": "https://maps.google.com/?q=India",
+    "capacity": 80,
+    "registered": 0,
+    "image": "/placeholders/program-green.svg",
+    "state": "past",
+    "publish": "published"
+  }
+]

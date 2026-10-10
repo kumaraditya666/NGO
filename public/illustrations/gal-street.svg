@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800" role="img" aria-label="Illustration of a tree-lined street">
+<rect width="800" height="800" fill="#F7EFE3"/>
+<polygon points="360,800 440,800 470,480 330,480" fill="#1A2E1F" opacity="0.85"/>
+<rect x="392" y="600" width="16" height="200" fill="#FDF8F1" opacity="0.5"/>
+<g>
+<circle cx="180" cy="330" r="80" fill="#2E4A35"/>
+<rect x="168" y="400" width="24" height="120" fill="#6B4A2F"/>
+<circle cx="620" cy="330" r="80" fill="#2E4A35"/>
+<rect x="608" y="400" width="24" height="120" fill="#6B4A2F"/>
+<circle cx="620" cy="290" r="40" fill="#1A2E1F" opacity="0.4"/>
+</g>
+<g>
+<polygon points="90,430 210,430 210,520 90,520" fill="#FDF8F1"/>
+<polygon points="80,430 150,380 220,430" fill="#C65D3B"/>
+<polygon points="590,430 710,430 710,520 590,520" fill="#FDF8F1"/>
+<polygon points="580,430 650,380 720,430" fill="#1A2E1F"/>
+</g>
+<g>
+<circle cx="330" cy="600" r="20" fill="#C65D3B"/>
+<rect x="313" y="622" width="34" height="66" rx="13" fill="#1A2E1F"/>
+<circle cx="470" cy="610" r="20" fill="#C9A86A"/>
+<rect x="453" y="632" width="34" height="66" rx="13" fill="#C65D3B"/>
+</g>
+<line x1="400" y1="120" x2="400" y2="240" stroke="#1A2E1F" stroke-width="5"/>
+<polygon points="400,240 460,300 430,300 430,350 370,350 370,300 340,300" fill="#C65D3B"/>
+</svg>

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600" role="img" aria-label="Illustration of a bookshelf and a person reading">
+<rect width="800" height="600" fill="#1A2E1F"/>
+<rect x="80" y="90" width="340" height="420" rx="16" fill="#F7EFE3"/>
+<rect x="110" y="130" width="280" height="14" rx="7" fill="#1A2E1F" opacity="0.2"/>
+<g>
+<rect x="115" y="160" width="34" height="120" rx="5" fill="#C65D3B"/>
+<rect x="153" y="145" width="34" height="135" rx="5" fill="#1A2E1F"/>
+<rect x="191" y="165" width="34" height="115" rx="5" fill="#C9A86A"/>
+<rect x="229" y="150" width="34" height="130" rx="5" fill="#2E4A35"/>
+<rect x="110" y="280" width="280" height="12" rx="6" fill="#1A2E1F" opacity="0.25"/>
+<rect x="115" y="308" width="34" height="110" rx="5" fill="#2E4A35"/>
+<rect x="153" y="295" width="34" height="123" rx="5" fill="#C65D3B"/>
+<rect x="191" y="312" width="34" height="106" rx="5" fill="#1A2E1F"/>
+<rect x="110" y="418" width="280" height="12" rx="6" fill="#1A2E1F" opacity="0.25"/>
+</g>
+<circle cx="590" cy="210" r="60" fill="#C9A86A" opacity="0.8"/>
+<circle cx="580" cy="400" r="34" fill="#FDF8F1"/>
+<rect x="548" y="436" width="64" height="100" rx="22" fill="#C65D3B"/>
+<g>
+<polygon points="660,470 610,450 610,510 660,490" fill="#FDF8F1"/>
+<polygon points="660,470 710,450 710,510 660,490" fill="#EAD0C2"/>
+<rect x="656" y="466" width="8" height="28" fill="#1A2E1F" opacity="0.5"/>
+</g>
+<rect x="480" y="540" width="240" height="10" rx="5" fill="#FDF8F1" opacity="0.2"/>
+</svg>

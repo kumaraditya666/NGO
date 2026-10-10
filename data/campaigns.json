@@ -1,0 +1,41 @@
+[
+  {
+    "id": "camp_library",
+    "slug": "community-library-fund",
+    "title": "Community Library Fund (sample)",
+    "summary": "Help stock a 2,000-book community library with furniture and a librarian for a year.",
+    "purpose": "Sample purpose. Approved budget below is illustrative — staff must replace with verified budget before accepting donations.",
+    "budget": [
+      { "label": "Books & shelves", "amount": 180000 },
+      { "label": "Librarian honorarium (12 mo)", "amount": 144000 },
+      { "label": "Repairs & utilities", "amount": 36000 }
+    ],
+    "goalAmount": 360000,
+    "offlineConfirmed": 45000,
+    "deadline": "2026-12-31",
+    "programId": "prog_edu",
+    "state": "active",
+    "publish": "published",
+    "image": "/placeholders/campaign-library.svg",
+    "createdAt": "2026-01-15T00:00:00.000Z"
+  },
+  {
+    "id": "camp_health",
+    "slug": "winter-health-camps",
+    "title": "Winter Health Camps (sample)",
+    "summary": "Six weekend health camps covering screening, medicines and referrals.",
+    "purpose": "Sample purpose pending client approval.",
+    "budget": [
+      { "label": "Medical team & medicines", "amount": 220000 },
+      { "label": "Logistics", "amount": 30000 }
+    ],
+    "goalAmount": 250000,
+    "offlineConfirmed": 20000,
+    "deadline": "2026-11-30",
+    "programId": "prog_health",
+    "state": "active",
+    "publish": "published",
+    "image": "/placeholders/campaign-health.svg",
+    "createdAt": "2026-02-01T00:00:00.000Z"
+  }
+]

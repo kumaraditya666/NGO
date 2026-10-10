@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800" role="img" aria-label="Illustration of hands holding a seedling">
+<rect width="800" height="800" fill="#EAD0C2"/>
+<circle cx="400" cy="360" r="230" fill="#FDF8F1"/>
+<g stroke="#1A2E1F" stroke-width="10" stroke-linecap="round" fill="none">
+<line x1="400" y1="420" x2="400" y2="300"/>
+</g>
+<ellipse cx="355" cy="290" rx="52" ry="26" transform="rotate(-28 355 290)" fill="#2E4A35"/>
+<ellipse cx="445" cy="290" rx="52" ry="26" transform="rotate(28 445 290)" fill="#2E4A35"/>
+<ellipse cx="400" cy="245" rx="46" ry="24" fill="#1A2E1F" opacity="0.85"/>
+<path d="M180 560 Q280 480 400 520 Q520 560 620 480 L620 580 Q520 660 400 620 Q280 580 180 640 Z" fill="#C65D3B"/>
+<path d="M180 560 Q280 480 400 520 Q520 560 620 480 L620 530 Q520 610 400 570 Q280 530 180 590 Z" fill="#A34A2E"/>
+<rect x="330" y="420" width="140" height="90" rx="20" fill="#1A2E1F"/>
+</svg>

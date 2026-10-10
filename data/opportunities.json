@@ -1,0 +1,20 @@
+[
+  {
+    "id": "opp_teach",
+    "title": "Weekend learning volunteer (sample)",
+    "location": "[LOCATION]",
+    "commitment": "4 hrs / weekend",
+    "description": "Support reading circles for ages 8–12. Training provided.",
+    "programId": "prog_edu",
+    "open": true
+  },
+  {
+    "id": "opp_health",
+    "title": "Health camp coordinator (sample)",
+    "location": "[LOCATION]",
+    "commitment": "Event days",
+    "description": "Help with registration desks and crowd flow at camps.",
+    "programId": "prog_health",
+    "open": true
+  }
+]

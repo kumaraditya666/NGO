@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ivory: #fdf8f1;
+  --forest: #1a2e1f;
+  --terracotta: #c65d3b;
+  --gold: #c9a86a;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--ivory);
+  color: var(--forest);
+  font-feature-settings: "ss01";
+}
+
+::selection {
+  background: #c65d3b;
+  color: #fff;
+}
+
+.font-editorial {
+  font-family: Fraunces, Georgia, serif;
+  letter-spacing: -0.02em;
+}
+
+/* tasteful reveal — content visible by default, enhanced with JS */
+.reveal {
+  opacity: 1;
+  transform: none;
+}
+.js .reveal[data-hidden="true"] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.js .reveal[data-visible="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  * {
+    animation: none !important;
+  }
+}
+
+.btn-sweep {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.18s ease, background 0.18s ease, color 0.18s ease;
+}
+.btn-sweep:hover {
+  transform: translateY(-1px);
+}
+.btn-sweep:active {
+  transform: translateY(0);
+}
+
+.rule-gold {
+  background: linear-gradient(90deg, #c9a86a, transparent);
+  height: 1px;
+}
+
+.texture-dots {
+  background-image: radial-gradient(rgba(26, 46, 31, 0.1) 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #c65d3b;
+  outline-offset: 2px;
+}
