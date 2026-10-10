@@ -87,7 +87,10 @@ export default function GalleryAdmin() {
               <label className="grid gap-1">Caption (only if the client provided one)<input value={g.caption || ""} onChange={(e) => setItems(items.map((x) => (x.id === g.id ? { ...x, caption: e.target.value } : x)))} onBlur={() => patch(g.id, { caption: g.caption || "" })} className="border rounded-xl px-3 py-1.5" placeholder="Empty = no caption shown" /></label>
               <div className="flex flex-wrap gap-2 items-center">
                 <label className="flex gap-1 items-center">Album <input value={g.category || ""} onChange={(e) => setItems(items.map((x) => (x.id === g.id ? { ...x, category: e.target.value } : x)))} onBlur={() => patch(g.id, { category: g.category || "All Photos" })} className="border rounded-xl px-2 py-1 w-36" /></label>
+                <label className="flex gap-1 items-center">Date <input value={g.takenAt || ""} onChange={(e) => setItems(items.map((x) => (x.id === g.id ? { ...x, takenAt: e.target.value } : x)))} onBlur={() => patch(g.id, { takenAt: g.takenAt || "" })} placeholder="YYYY-MM-DD" className="border rounded-xl px-2 py-1 w-32" /></label>
+                <label className="flex gap-1 items-center">Location <input value={g.takenWhere || ""} onChange={(e) => setItems(items.map((x) => (x.id === g.id ? { ...x, takenWhere: e.target.value } : x)))} onBlur={() => patch(g.id, { takenWhere: g.takenWhere || "" })} placeholder="Where relevant" className="border rounded-xl px-2 py-1 w-36" /></label>
                 <label className="flex gap-1 items-center font-semibold"><input type="checkbox" checked={g.published !== false} onChange={(e) => patch(g.id, { published: e.target.checked })} /> Published</label>
+                <label className="flex gap-1 items-center font-semibold"><input type="checkbox" checked={g.featured === true} onChange={(e) => patch(g.id, { featured: e.target.checked })} /> Homepage pick</label>
                 <span className="text-forest-muted">#{k + 1}</span>
               </div>
             </div>

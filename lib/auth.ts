@@ -10,6 +10,8 @@ export interface StaffUser {
   salt: string;
   hash: string;
   createdAt: string;
+  resetHash?: string;
+  resetExp?: number;
 }
 
 export function hashPassword(password: string, salt?: string) {

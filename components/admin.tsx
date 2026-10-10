@@ -29,7 +29,7 @@ export function Shell({ me, title, children }: any) {
         </div>
       </div>
       <nav className="mt-4 flex flex-wrap gap-2 text-sm">
-        {[["dashboard", "/admin/dashboard"], ["donations", "/admin/dashboard/donations"], ["inbox", "/admin/dashboard/inbox"], ["gallery", "/admin/dashboard/gallery"], ["content", "/admin/dashboard/content"], ["settings", "/admin/dashboard/settings"], ["staff", "/admin/dashboard/staff"], ["audit", "/admin/dashboard/audit"], ["checklist", "/admin/dashboard/checklist"]].map(([l, h]) => (
+        {[["overview", "/admin/dashboard"], ["volunteers", "/admin/dashboard/inbox?kind=volunteers"], ["enquiries", "/admin/dashboard/inbox?kind=enquiries"], ["supplies", "/admin/dashboard/inbox?kind=inkind_pledges"], ["donations", "/admin/dashboard/donations"], ["gallery", "/admin/dashboard/gallery"], ["videos", "/admin/dashboard/videos"], ["content", "/admin/dashboard/content"], ["settings", "/admin/dashboard/settings"], ["staff", "/admin/dashboard/staff"], ["audit", "/admin/dashboard/audit"], ["checklist", "/admin/dashboard/checklist"]].map(([l, h]) => (
           <Link key={h} href={h} className="rounded-full border bg-white px-4 py-1.5 hover:bg-forest hover:text-white">{l}</Link>
         ))}
       </nav>

@@ -53,7 +53,7 @@ export async function getUpdates(): Promise<CampaignUpdate[]> {
 
 export function campaignRaised(campaign: Campaign, donations: Donation[]) {
   const online = donations
-    .filter((d) => d.status === "confirmed" && d.fundType === "campaign" && d.fundId === campaign.id)
+    .filter((d) => d.status === "confirmed" && !d.testRecord && d.fundType === "campaign" && d.fundId === campaign.id)
     .reduce((s, d) => s + (d.verifiedAmount ?? d.amount), 0);
   const offline = campaign.offlineConfirmed || 0;
   return { online, offline, total: online + offline };

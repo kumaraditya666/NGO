@@ -36,7 +36,7 @@ export default function DonationsAdmin() {
       <div className="mt-4 space-y-3">
         {list.map((d) => (
           <div key={d.reference} className="rounded-2xl border bg-white p-4 text-sm">
-            <p><strong>{d.reference}</strong> · {d.status} · ₹{d.amount} {d.verifiedAmount ? `(verified ₹${d.verifiedAmount})` : ""} {d.duplicateUtr ? <span className="text-terracotta font-semibold">· possible duplicate UTR — check</span> : ""}</p>
+            <p><strong>{d.reference}</strong> · {d.status} · ₹{d.amount} {d.verifiedAmount ? `(verified ₹${d.verifiedAmount})` : ""} {d.testRecord ? <span className="font-semibold">· TEST RECORD (excluded from totals)</span> : ""} {d.duplicateUtr ? <span className="text-terracotta font-semibold">· possible duplicate UTR — check</span> : ""}</p>
             <p className="text-forest-muted">{d.name} · {d.email} · {d.phone} · {d.fundType}/{d.fundId} · UTR {d.utr || "—"} · paid {d.paidAt || "—"} {d.cannotFindRef ? "· cannot-find-ref path" : ""}</p>
             {d.proofFile && <p><a className="underline text-terracotta" target="_blank" href={`/api/admin/proofs?file=${d.proofFile}`}>View proof (staff only)</a></p>}
             <div className="mt-2 flex flex-wrap gap-2">
@@ -44,6 +44,7 @@ export default function DonationsAdmin() {
               <input placeholder="internal note" className="border rounded px-2 py-1 flex-1 min-w-[180px]" value={note[d.reference] || ""} onChange={(e) => setNote({ ...note, [d.reference]: e.target.value })} />
               <button onClick={() => { if (confirm(`Confirm ${d.reference} after matching bank credit?`)) act(d.reference, "confirm"); }} className="rounded-full bg-forest text-white px-4 py-1">Confirm</button>
               <button onClick={() => { if (confirm(`Reject ${d.reference}?`)) act(d.reference, "reject"); }} className="rounded-full border px-4 py-1">Reject</button>
+              <button onClick={() => act(d.reference, d.testRecord ? "unmark_test" : "mark_test")} className="rounded-full border px-4 py-1" title="Test records never count toward public totals">{d.testRecord ? "Unmark test" : "Mark test"}</button>
             </div>
           </div>
         ))}

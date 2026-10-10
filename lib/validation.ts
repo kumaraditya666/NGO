@@ -33,6 +33,7 @@ export const volunteerSchema = z
     eventId: z.string().max(80).optional().or(z.literal("")),
     message: z.string().max(2000).optional().or(z.literal("")),
     consent: z.literal(true),
+    company: z.string().max(100).optional().or(z.literal("")),
   })
   .superRefine((v, ctx) => {
     const email = (v.email || "").trim();
@@ -53,6 +54,7 @@ export const enquirySchema = z.object({
   subject: z.string().max(200).optional().or(z.literal("")),
   message: z.string().min(5).max(4000),
   consent: z.literal(true),
+  company: z.string().max(100).optional().or(z.literal("")),
 });
 
 export const eventRegSchema = z.object({

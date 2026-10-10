@@ -10,6 +10,12 @@ export interface GalleryPhoto {
   alt: string;
   width?: number;
   height?: number;
+  takenAt?: string;
+  takenWhere?: string;
+}
+
+function whenWhere(g: { takenAt?: string; takenWhere?: string }): string {
+  return [g.takenAt, g.takenWhere].filter(Boolean).join(" · ");
 }
 
 export default function GalleryClient({
@@ -113,7 +119,10 @@ export default function GalleryClient({
               className="w-full h-auto block"
             />
             {g.caption ? (
-              <span className="block px-3 py-2.5 text-[13px] text-slate-600 font-sans">{g.caption}</span>
+              <span className="block px-3 pt-2.5 text-[13px] text-slate-600 font-sans">{g.caption}</span>
+            ) : null}
+            {whenWhere(g) ? (
+              <span className={`block px-3 text-[12px] text-slate-500 font-sans ${g.caption ? "pb-2.5" : "py-2.5"}`}>{whenWhere(g)}</span>
             ) : null}
           </button>
         ))}
@@ -139,6 +148,7 @@ export default function GalleryClient({
               <p className="font-sans text-sm text-white/80" aria-live="polite">
                 {(index ?? 0) + 1} / {visible.length}
                 {light.caption ? <span className="block mt-1 text-white">{light.caption}</span> : null}
+                {whenWhere(light) ? <span className="block mt-0.5 text-white/70 text-[13px]">{whenWhere(light)}</span> : null}
               </p>
               <div className="flex gap-2 shrink-0">
                 <button

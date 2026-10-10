@@ -11,7 +11,18 @@ export async function POST(req: Request) {
   const p = enquirySchema.safeParse(body);
   if (!p.success) return NextResponse.json({ error: p.error.issues[0]?.message }, { status: 400 });
   try {
+    if ((p.data.company || "").trim()) {
+      // Honeypot filled: pretend success without storing anything.
+      return NextResponse.json({ message: "Received — our team will get back to you.", id: "ok" });
+    }
     const list = await readCollection<any[]>("enquiries", []);
+    const dup = list.find(
+      (x) =>
+        x.email === p.data.email &&
+        (x.message || "") === (p.data.message || "") &&
+        Date.now() - new Date(x.createdAt).getTime() < 120000
+    );
+    if (dup) return NextResponse.json({ message: "Received — our team will get back to you.", id: dup.id });
     const rec = { id: uid("enq"), ...p.data, status: "new", createdAt: new Date().toISOString() };
     list.unshift(rec);
     await writeCollection("enquiries", list);

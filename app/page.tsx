@@ -27,12 +27,12 @@ export default async function Home() {
   const featured = campaigns.find((c) => c.publish === "published" && c.state === "active");
   const onlineFor = (id: string) =>
     donations
-      .filter((d) => d.status === "confirmed" && d.fundType === "campaign" && d.fundId === id)
+      .filter((d) => d.status === "confirmed" && !d.testRecord && d.fundType === "campaign" && d.fundId === id)
       .reduce((s, d) => s + (d.verifiedAmount ?? d.amount), 0);
   const upcoming = events.filter((e) => e.state === "upcoming" && e.publish === "published").slice(0, 2);
   const preview = [...gallery]
     .filter((g) => g.published !== false)
-    .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+    .sort((a, b) => Number(b.featured === true) - Number(a.featured === true) || (a.order ?? 0) - (b.order ?? 0))
     .slice(0, 8);
 
   return (

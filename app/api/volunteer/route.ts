@@ -11,7 +11,19 @@ export async function POST(req: Request) {
   const p = volunteerSchema.safeParse(body);
   if (!p.success) return NextResponse.json({ error: p.error.issues[0]?.message }, { status: 400 });
   try {
+    if ((p.data.company || "").trim()) {
+      // Honeypot filled: pretend success without storing anything.
+      return NextResponse.json({ message: "Application saved — our team reviews every application and will be in touch.", id: "ok" });
+    }
     const list = await readCollection<any[]>("volunteers", []);
+    const dup = list.find(
+      (x) =>
+        (x.email || "") === (p.data.email || "") &&
+        x.name === p.data.name &&
+        (x.message || "") === (p.data.message || "") &&
+        Date.now() - new Date(x.createdAt).getTime() < 120000
+    );
+    if (dup) return NextResponse.json({ message: "Application saved — our team reviews every application and will be in touch.", id: dup.id });
     const rec = { id: uid("vol"), ...p.data, status: "new", createdAt: new Date().toISOString() };
     list.unshift(rec);
     await writeCollection("volunteers", list);

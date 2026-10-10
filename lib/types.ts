@@ -70,6 +70,8 @@ export interface Donation {
   reviewer?: string;
   reviewedAt?: string;
   internalNote?: string;
+  /** Test/demo record: never counts toward public totals. */
+  testRecord?: boolean;
   createdAt: string;
   updatedAt: string;
 }
@@ -168,6 +170,12 @@ export interface GalleryItem {
   order?: number;
   /** Unpublished photos stay private. Undefined counts as published. */
   published?: boolean;
+  /** Event/activity date, free text (e.g. 2026-08-15). Shown only if set. */
+  takenAt?: string;
+  /** Event/activity location, free text. Shown only if set. */
+  takenWhere?: string;
+  /** Featured photos lead the homepage preview. */
+  featured?: boolean;
 }
 
 export interface VideoItem {

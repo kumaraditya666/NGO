@@ -2,8 +2,8 @@
 import { useState } from "react";
 import { Field, inputCls, usePublicForm } from "@/components/forms";
 export default function VolunteerForm({ programs, events, opps }: any) {
-  const { msg, ok, post } = usePublicForm("/api/volunteer");
-  const [f, setF] = useState({ name: "", email: "", phone: "", location: "", skills: "", interests: "", availability: "", programId: "", eventId: "", message: "", consent: false });
+  const { msg, ok, busy, post } = usePublicForm("/api/volunteer");
+  const [f, setF] = useState({ name: "", email: "", phone: "", location: "", skills: "", interests: "", availability: "", programId: "", eventId: "", message: "", consent: false, company: "" });
   const set = (k: string, v: any) => setF({ ...f, [k]: v });
   const openRoles = (opps || []).filter((o: any) => o.open);
   if (ok) return (
@@ -32,7 +32,8 @@ export default function VolunteerForm({ programs, events, opps }: any) {
       <Field label="Message (optional)"><textarea className={inputCls} rows={4} value={f.message} onChange={(e) => set("message", e.target.value)} /></Field>
       <p className="text-[13px] text-slate-500">Only your name and one way to reach you (email or phone) are required.</p>
       <label className="text-sm flex gap-2 items-start text-slate-700"><input type="checkbox" required checked={f.consent} onChange={(e) => set("consent", e.target.checked)} className="mt-1" /> I consent to being contacted about volunteering. *</label>
-      <button className="rounded-md bg-brand text-white px-6 py-3 font-sans font-bold hover:bg-brand-dark transition">Submit application</button>
+      <input type="text" name="company" value={f.company} autoComplete="off" tabIndex={-1} aria-hidden="true" className="hidden" onChange={(e) => set("company", e.target.value)} />
+      <button disabled={busy} className="rounded-md bg-brand text-white px-6 py-3 font-sans font-bold hover:bg-brand-dark transition disabled:opacity-60">{busy ? "Sending…" : "Submit application"}</button>
       {msg && <p className="text-sm text-slate-600" role="status">{msg}</p>}
       {openRoles.length > 0 && (
         <div className="rounded-xl bg-cream border border-slate-200 p-4 text-sm text-slate-700">

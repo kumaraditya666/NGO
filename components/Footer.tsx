@@ -76,7 +76,10 @@ export default async function Footer() {
       <div className="border-t border-white/15">
         <div className="mx-auto max-w-[1240px] px-4 py-4 text-xs text-white/60 flex flex-wrap gap-2 justify-between">
           <span>© {new Date().getFullYear()} {name} · Community-rooted nonprofit, India.</span>
-          <span>Online donations open only after verified payment details are published.</span>
+          <span className="flex gap-3">
+            <span>Online donations open only after verified payment details are published.</span>
+            <Link href="/admin/login" className="text-white/40 hover:text-white/80 hover:underline">Admin Login</Link>
+          </span>
         </div>
       </div>
     </footer>

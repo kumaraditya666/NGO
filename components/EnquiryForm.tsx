@@ -2,8 +2,8 @@
 import { useState } from "react";
 import { Field, inputCls, usePublicForm } from "@/components/forms";
 export default function EnquiryForm({ kind }: { kind: string }) {
-  const { msg, ok, post } = usePublicForm("/api/enquiries");
-  const [f, setF] = useState({ name: "", email: "", phone: "", subject: "", message: "", consent: false });
+  const { msg, ok, busy, post } = usePublicForm("/api/enquiries");
+  const [f, setF] = useState({ name: "", email: "", phone: "", subject: "", message: "", consent: false, company: "" });
   const set = (k: string, v: any) => setF({ ...f, [k]: v });
   if (ok) return <div className="rounded-xl border border-slate-200 bg-cream p-6 font-sans"><p className="font-sans font-bold text-ink">Received — thank you.</p><p className="text-sm mt-1 text-slate-600">{msg}</p></div>;
   return (
@@ -16,7 +16,8 @@ export default function EnquiryForm({ kind }: { kind: string }) {
       </div>
       <Field label="Message *"><textarea required rows={5} className={inputCls} value={f.message} onChange={(e) => set("message", e.target.value)} /></Field>
       <label className="text-sm flex gap-2 text-slate-700"><input type="checkbox" required checked={f.consent} onChange={(e) => set("consent", e.target.checked)} /> I consent to being contacted. *</label>
-      <button className="rounded-md bg-brand text-white px-6 py-3 font-sans font-bold hover:bg-brand-dark transition">Send enquiry</button>
+      <input type="text" name="company" value={f.company} autoComplete="off" tabIndex={-1} aria-hidden="true" className="hidden" onChange={(e) => set("company", e.target.value)} />
+      <button disabled={busy} className="rounded-md bg-brand text-white px-6 py-3 font-sans font-bold hover:bg-brand-dark transition disabled:opacity-60">{busy ? "Sending…" : "Send enquiry"}</button>
       {msg && <p className="text-sm text-slate-600" role="status">{msg}</p>}
     </form>
   );

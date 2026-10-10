@@ -3,14 +3,21 @@ import { useState } from "react";
 export function usePublicForm(url: string) {
   const [msg, setMsg] = useState("");
   const [ok, setOk] = useState(false);
+  const [busy, setBusy] = useState(false);
   async function post(body: any) {
+    if (busy) return false;
+    setBusy(true);
     setMsg("Sending…");
-    const res = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
-    const j = await res.json().catch(() => ({}));
-    if (res.ok) { setOk(true); setMsg(j.message || "Submitted — thank you."); return true; }
-    setMsg(j.error || "Something went wrong"); return false;
+    try {
+      const res = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+      const j = await res.json().catch(() => ({}));
+      if (res.ok) { setOk(true); setMsg(j.message || "Submitted — thank you."); return true; }
+      setMsg(j.error || "Something went wrong"); return false;
+    } finally {
+      setBusy(false);
+    }
   }
-  return { msg, ok, post, setMsg };
+  return { msg, ok, busy, post, setMsg };
 }
 
 export function Field({ label, children, hint }: any) {

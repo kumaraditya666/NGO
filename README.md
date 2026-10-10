@@ -29,7 +29,10 @@ Add gallery photos: drop originals into `public/images/gallery/` (subfolders bec
 
 ## Admin guide (short)
 
-- Sign in at `/admin`. Roles: administrator (settings + staff), editor (content + gallery), reviewer (donations + inbox). Every protected API enforces roles server-side.
+- Sign in at `/admin/login` (a discreet link sits in the footer). No public registration exists.
+- **First admin**: with an empty staff store, signing in with `ADMIN_EMAIL` / `ADMIN_PASSWORD` from env bootstraps the administrator — then create named staff in Admin > Staff and remove/rotate the bootstrap credential. Never commit real passwords; all secrets live in env only.
+- **Password reset**: staff use “Forgot password” (emailed link, 1-hour token, only when SMTP is configured); otherwise an administrator sets passwords directly in Admin > Staff. Every reset is audit-logged.
+- Roles: administrator (settings + staff), editor (content + gallery), reviewer (donations + inbox). Every protected API enforces roles server-side.
 - **Checklist** (`/admin/dashboard/checklist`, private): live launch-readiness computed from data + integrations.
 - **Gallery**: upload (JPG/PNG/WebP, 10 at once, unpublished by default), edit alt/caption/album, publish toggle, reorder, delete with confirmation.
 - **Settings**: contact details, display/legal name, `donationsEnabled` + `pickupEnabled` switches. Payment fields stay empty until verified. All changes audited.
@@ -37,7 +40,7 @@ Add gallery photos: drop originals into `public/images/gallery/` (subfolders bec
 
 ## Production setup
 
-1. Supabase project → run `supabase/migrations/001_initial.sql` → private `proofs` bucket.
+1. Supabase project → run `supabase/migrations/001_initial.sql` then `002_gallery_videos.sql` (prepared tables; app still uses the JSON store until wired) → private `proofs` bucket (+ `gallery`, `gallery-originals` when wiring uploads).
 2. Env (Vercel or `.env.local`): `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_DEMO_MODE=false`, `SESSION_SECRET` (32+ random chars), `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `SMTP_*` for real email, `NEXT_PUBLIC_SITE_URL` = public URL.
 3. Sign in once, create named staff, rotate the bootstrap credential.
 4. Only enable `donationsEnabled` after the bank account is active AND verified UPI/bank details + client QR are published in Settings.

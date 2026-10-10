@@ -22,12 +22,20 @@ export async function POST(req: Request) {
   const g = requireApiRole(req, ["reviewer"]);
   if ("error" in g) return g.error;
   const body = await req.json().catch(() => ({}));
-  const { reference, action, verifiedAmount, note } = body as { reference: string; action: "confirm" | "reject" | "cancel"; verifiedAmount?: number; note?: string };
+  const { reference, action, verifiedAmount, note } = body as { reference: string; action: "confirm" | "reject" | "cancel" | "mark_test" | "unmark_test"; verifiedAmount?: number; note?: string };
   if (!reference || !action) return NextResponse.json({ error: "Missing fields" }, { status: 400 });
   const list = await readCollection<Donation[]>("donations", []);
   const idx = list.findIndex((d) => d.reference === reference);
   if (idx < 0) return NextResponse.json({ error: "Not found" }, { status: 404 });
   const d = list[idx];
+  if (action === "mark_test" || action === "unmark_test") {
+    d.testRecord = action === "mark_test";
+    d.updatedAt = new Date().toISOString();
+    list[idx] = d;
+    await writeCollection("donations", list);
+    await logAudit({ by: g.session.email, action: `donation:${action}`, entity: "donation", entityId: d.reference, detail: "test flag toggled" });
+    return NextResponse.json({ ok: true, donation: d });
+  }
   // prevent double confirmation / double counting
   if (d.status === "confirmed" && action === "confirm") return NextResponse.json({ error: "Already confirmed — no double counting." }, { status: 409 });
   if (d.status === "rejected" || d.status === "cancelled") return NextResponse.json({ error: "Already closed." }, { status: 409 });
