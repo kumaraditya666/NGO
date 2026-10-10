@@ -21,7 +21,6 @@ export default function Header() {
   const path = usePathname();
   const [open, setOpen] = useState(false);
   const [drop, setDrop] = useState(false);
-  const [logoOk, setLogoOk] = useState(true);
   const dropRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -49,18 +48,11 @@ export default function Header() {
     <header className="sticky top-0 z-40 bg-white border-b border-slate-200">
       <div className="mx-auto max-w-[1240px] px-4 flex items-center justify-between h-[68px] gap-4">
         <Link href="/" className="flex items-center gap-2.5 shrink-0" aria-label="Shikshaa Sewa Charitable Trust — home">
-          {logoOk ? (
-            <img
-              src="/logo.png"
-              alt="Shikshaa Sewa Charitable Trust"
-              onError={() => setLogoOk(false)}
-              className="h-11 w-auto rounded-sm bg-white"
-            />
-          ) : (
-            <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-md bg-brand font-sans font-extrabold text-white text-2xl">
-              S
-            </span>
-          )}
+          <img
+            src="/logo.png"
+            alt="Shikshaa Sewa Charitable Trust"
+            className="h-11 w-auto rounded-sm bg-white"
+          />
           <span className="leading-tight">
             <span className="block font-sans font-extrabold text-[18px] text-ink">Shikshaa Sewa</span>
             <span className="block text-[10px] font-sans font-bold uppercase tracking-[0.14em] text-slate-500">

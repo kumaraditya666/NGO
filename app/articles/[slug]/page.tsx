@@ -8,9 +8,9 @@ export default async function ArticlePage({ params }: { params: { slug: string }
   if (!a) return notFound();
   return (
     <div className="mx-auto max-w-3xl px-4 py-12 font-sans">
-      <Link href="/articles" className="text-sm font-bold text-teal-700 underline">← Articles</Link>
-      <p className="mt-3 font-sans text-[12px] font-bold uppercase tracking-widest text-teal-700">{a.category} · {a.date}</p>
-      <h1 className="font-sans font-extrabold text-slate-900 text-4xl mt-2">{a.title}</h1>
+      <Link href="/articles" className="text-sm font-bold text-brand underline">← Articles</Link>
+      <p className="mt-3 font-sans text-[12px] font-bold uppercase tracking-widest text-brand">{a.category} · {a.date}</p>
+      <h1 className="font-sans font-extrabold text-ink text-4xl mt-2">{a.title}</h1>
       <img src={a.image} alt={a.title} className="mt-6 rounded-xl w-full aspect-[16/8] object-cover border border-slate-200" />
       <p className="mt-6 leading-relaxed text-slate-700 whitespace-pre-wrap">{a.body}</p>
       <div className="mt-6 flex flex-wrap gap-2 text-sm">
