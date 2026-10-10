@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { donationsEnabled, DONATIONS_CLOSED } from "@/lib/site";
 import fs from "node:fs/promises";
 import path from "node:path";
 import crypto from "node:crypto";
@@ -7,6 +8,8 @@ const MAX = 5 * 1024 * 1024;
 const ALLOWED = new Set(["image/jpeg", "image/png", "application/pdf"]);
 
 export async function POST(req: Request) {
+  if (!(await donationsEnabled()))
+    return NextResponse.json({ error: DONATIONS_CLOSED }, { status: 503 });
   try {
     const form = await req.formData();
     const file = form.get("file") as File | null;

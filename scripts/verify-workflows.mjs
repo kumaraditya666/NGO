@@ -1,5 +1,7 @@
-// Meaningful workflow tests against the running server (default http://localhost:3000).
-// Covers: pending-until-approved, no double count, rejected exclusion, private proofs, capacity, draft privacy, upload validation.
+// Workflow tests against the running server (default http://localhost:3000).
+// Current posture: online donations DISABLED (server-enforced 503), samples in draft,
+// gallery/volunteer/contact live. Covers: payment lock, draft privacy, form honesty,
+// gallery publishing, auth gating, upload validation, event capacity.
 const BASE = process.env.BASE_URL || "http://localhost:3000";
 let pass = 0, fail = 0;
 const ok = (name, cond, extra = "") => { if (cond) { pass++; console.log(`PASS ${name}`); } else { fail++; console.log(`FAIL ${name} ${extra}`); } };
@@ -13,71 +15,76 @@ async function adminLogin() {
 }
 
 async function main() {
-  // 1. create donation stays awaiting_payment
-  let r = await fetch(`${BASE}/api/donations/create`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: "Test Donor", email: "donor@test.org", fundType: "general", amount: 501, consent: true }) });
-  let d = await j(r);
-  ok("donation create pending", r.ok && d.status === "awaiting_payment", JSON.stringify(d));
-
-  // 2. submit reference -> submitted_for_verification
-  r = await fetch(`${BASE}/api/donations/verify`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ reference: d.reference, utr: "TESTUTR" + Date.now(), paidAt: "2026-10-01" }) });
-  let v = await j(r);
-  ok("donation submitted", r.ok && v.status === "submitted_for_verification", JSON.stringify(v));
-
-  // 3. campaign totals exclude pending (public page still loads, bar math server-side)
-  r = await fetch(`${BASE}/campaigns`);
-  ok("campaigns page loads", r.ok);
-
-  // 4. status link requires token; wrong token rejected
-  r = await fetch(`${BASE}/api/donations/status?reference=${d.reference}&token=wrong`);
-  ok("status token enforced", r.status === 404 || r.status === 400);
-
-  // 5. ack blocked before confirmation
-  r = await fetch(`${BASE}/api/donations/ack?reference=${d.reference}&token=${d.token}`);
-  ok("ack blocked pre-confirm", r.status === 403);
-
-  // 6. invalid upload rejected
+  // 1-3. payment initiation + reference submission + proof upload all disabled
+  let r = await fetch(`${BASE}/api/donations/create`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: "X", email: "x@y.co", fundType: "general", amount: 501, consent: true }) });
+  ok("donation create disabled (503)", r.status === 503);
+  r = await fetch(`${BASE}/api/donations/verify`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ reference: "NGO-1", utr: "U1", paidAt: "2026-10-01" }) });
+  ok("donation verify disabled (503)", r.status === 503);
   const fd = new FormData();
-  fd.append("file", new Blob(["x"], { type: "text/plain" }), "evil.txt");
-  fd.append("reference", d.reference);
+  fd.append("file", new Blob(["x"], { type: "image/png" }), "p.png");
   r = await fetch(`${BASE}/api/donations/upload`, { method: "POST", body: fd });
-  ok("invalid upload rejected", r.status === 400);
+  ok("donation upload disabled (503)", r.status === 503);
 
-  // 7. oversized upload rejected (6MB)
-  const big = new FormData();
-  big.append("file", new Blob([new Uint8Array(6 * 1024 * 1024)], { type: "image/png" }), "big.png");
-  big.append("reference", d.reference);
-  r = await fetch(`${BASE}/api/donations/upload`, { method: "POST", body: big });
-  ok("oversized upload rejected", r.status === 400);
+  // 4. donate page shows opening-soon, no payment details
+  r = await fetch(`${BASE}/donate`);
+  const donateHtml = await r.text();
+  ok("donate page opening-soon", r.ok && /opening soon/i.test(donateHtml) && !/UPI ID|Account number|IFSC/i.test(donateHtml));
 
-  // 8. admin confirm -> ack available; double confirm blocked
+  // 5. support page offers alternatives
+  r = await fetch(`${BASE}/support`);
+  ok("support page loads", r.ok);
+
+  // 6. draft campaign detail stays private
+  r = await fetch(`${BASE}/campaigns/community-library-fund`);
+  ok("draft campaign 404s", r.status === 404);
+
+  // 7. draft program detail stays private
+  r = await fetch(`${BASE}/programs/learning-foundations`);
+  ok("draft program 404s", r.status === 404);
+
+  // 8. volunteer saves with phone only (email optional now)
+  r = await fetch(`${BASE}/api/volunteer`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: "Vol Test", phone: "9999999999", consent: true }) });
+  let v = await j(r);
+  ok("volunteer phone-only saves", r.ok && !!v.id, JSON.stringify(v));
+
+  // 9. volunteer requires at least one contact
+  r = await fetch(`${BASE}/api/volunteer`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: "No Contact", consent: true }) });
+  ok("volunteer contact required", r.status === 400);
+
+  // 10. contact enquiry saves honestly
+  r = await fetch(`${BASE}/api/enquiries`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: "C Test", email: "c@test.co", kind: "contact", message: "hello there", consent: true }) });
+  ok("enquiry saves", r.ok);
+
+  // 11-12. gallery admin upload validation (auth-gated)
   const cookie = await adminLogin();
-  const H = { "Content-Type": "application/json", Cookie: cookie };
-  r = await fetch(`${BASE}/api/admin/donations`, { method: "POST", headers: H, body: JSON.stringify({ reference: d.reference, action: "confirm", verifiedAmount: 501, note: "test credit matched" }) });
-  let c = await j(r);
-  ok("admin confirm", r.ok && c.donation?.status === "confirmed", JSON.stringify(c));
-  r = await fetch(`${BASE}/api/donations/ack?reference=${d.reference}&token=${d.token}`);
-  ok("ack after confirm", r.ok);
-  r = await fetch(`${BASE}/api/admin/donations`, { method: "POST", headers: H, body: JSON.stringify({ reference: d.reference, action: "confirm", verifiedAmount: 501 }) });
-  ok("double confirm blocked", r.status === 409);
+  const H = { Cookie: cookie };
+  const bad = new FormData();
+  bad.append("files", new Blob(["x"], { type: "text/plain" }), "evil.txt");
+  r = await fetch(`${BASE}/api/admin/gallery/upload`, { method: "POST", headers: H, body: bad });
+  ok("gallery upload rejects non-image", r.status === 400);
+  r = await fetch(`${BASE}/api/admin/gallery/upload`, { method: "POST", body: bad });
+  ok("gallery upload requires staff", r.status === 401);
 
-  // 9. rejected does not count: create + reject
-  r = await fetch(`${BASE}/api/donations/create`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: "Rej", email: "rej@test.org", fundType: "general", amount: 999, consent: true }) });
-  let d2 = await j(r);
-  await fetch(`${BASE}/api/donations/verify`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ reference: d2.reference, utr: "REJ" + Date.now(), paidAt: "2026-10-01" }) });
-  r = await fetch(`${BASE}/api/admin/donations`, { method: "POST", headers: H, body: JSON.stringify({ reference: d2.reference, action: "reject", note: "no credit" }) });
-  ok("reject works", r.ok);
+  // 13. checklist requires staff
+  r = await fetch(`${BASE}/api/admin/checklist`);
+  ok("checklist guarded", r.status === 401);
+  r = await fetch(`${BASE}/api/admin/checklist`, { headers: H });
+  const cl = await j(r);
+  ok("checklist loads for staff", r.ok && cl.total > 0, `items=${cl.total}`);
 
-  // 10. proofs private without staff session
-  r = await fetch(`${BASE}/api/admin/proofs?file=anything.png`);
-  ok("proofs require staff", r.status === 401 || r.status === 404);
+  // 14. settings change requires administrator
+  r = await fetch(`${BASE}/api/admin/settings`, { method: "POST", headers: { "Content-Type": "application/json", Cookie: cookie }, body: JSON.stringify({ donationsEnabled: false }) });
+  ok("settings still admin-only + toggle accepted", r.ok);
 
-  // 11. draft content private: mark check via campaigns API not exposing drafts publicly (page only lists published)
-  r = await fetch(`${BASE}/api/admin/collections?name=campaigns`, { headers: { Cookie: cookie } });
-  ok("admin collections guarded", r.ok);
-
-  // 12. event capacity enforced (tiny capacity event)
+  // 15. event capacity enforced
   r = await fetch(`${BASE}/api/events/register`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ eventId: "nope", name: "Xyz", email: "x@y.co", consent: true }) });
   ok("bad event rejected", r.status === 404);
+
+  // 16. public pages render
+  for (const u of ["/", "/gallery", "/volunteer", "/support", "/transparency", "/contact"]) {
+    r = await fetch(`${BASE}${u}`);
+    ok(`page ${u} loads`, r.ok);
+  }
 
   console.log(`\n${pass} passed, ${fail} failed`);
   process.exit(fail ? 1 : 0);

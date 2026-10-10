@@ -1,5 +1,7 @@
 [
-  { "id": "faq1", "q": "How do I donate?", "a": "Choose an amount on the Donate page, pay via the verified UPI QR or bank details, then submit your UTR/reference. Staff verify every credit before confirming." },
-  { "id": "faq2", "q": "Do I get a tax receipt?", "a": "We issue an acknowledgement for every confirmed donation. Any tax-specific wording must be supplied and approved by the client — do not assume a deduction." },
-  { "id": "faq3", "q": "Can I volunteer remotely?", "a": "Yes — mention your skills and availability in the volunteer form and the team will match you." }
+  { "id": "faq1", "q": "Can I donate online right now?", "a": "Not yet — the NGO's bank account is still being opened, so online donations are disabled. See the Support Us page for other ways to help: volunteering, supplies, or contacting the team." },
+  { "id": "faq2", "q": "How will donations be verified when they open?", "a": "Donors will pay by UPI or bank transfer and submit a payment reference. Staff will confirm each gift only after matching the bank credit. Pending gifts never count toward totals." },
+  { "id": "faq3", "q": "Will I get a tax receipt?", "a": "No tax deduction is promised. When donations open, confirmed gifts will receive a plain acknowledgement — not a tax certificate. Any tax-related wording needs confirmed eligibility and approved text." },
+  { "id": "faq4", "q": "How can I volunteer?", "a": "Fill in the volunteer form with your name, a way to reach you (email or phone), your area, interests and availability. The team reviews every application and replies." },
+  { "id": "faq5", "q": "Where can I see what the NGO actually does?", "a": "The gallery shows photographs from the team's work. Programs, impact figures and reports are published only after the NGO approves them — anything still in draft stays private." }
 ]

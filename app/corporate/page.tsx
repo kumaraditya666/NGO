@@ -1,17 +1,42 @@
 import EnquiryForm from "@/components/EnquiryForm";
 import Reveal from "@/components/Reveal";
 import { SectionHeading } from "@/components/ui";
+import { readCollection } from "@/lib/store";
 export const metadata = { title: "Corporate partnerships" };
-export default function Corporate() {
+export const dynamic = "force-dynamic";
+export default async function Corporate() {
+  const reports = await readCollection<any[]>("reports", []);
+  const profile = reports.find((r: any) => r.kind === "ngo-profile");
   return (
-    <div className="mx-auto max-w-4xl px-5 py-12">
-      <Reveal><SectionHeading kicker="Corporate" title="Partner with care" lede="Sample partnership options — only publish approved case studies with written consent." /></Reveal>
+    <div className="mx-auto max-w-4xl px-4 py-12 font-sans">
+      <Reveal>
+        <SectionHeading
+          kicker="Corporate"
+          title="Partner with care"
+          lede="Workplace giving, employee volunteering and programme support — shaped around what the team can genuinely deliver."
+        />
+      </Reveal>
       <div className="mt-6 grid md:grid-cols-3 gap-4">
-        {[["Workplace giving", "Payroll or event-linked giving with verified receipts."], ["Employee volunteering", "Team days at learning circles, camps and drives."], ["Program support", "Co-fund a library, camp series or garden with open budgets."]].map(([t, b]) => (
-          <div key={t} className="rounded-2xl border bg-white p-5"><h2 className="font-semibold">{t}</h2><p className="text-sm text-forest-muted mt-1">{b}</p></div>
+        {[
+          ["Workplace giving", "Payroll or event-linked giving with clear receipts."],
+          ["Employee volunteering", "Team days alongside community activities."],
+          ["Programme support", "Co-fund an approved programme with an open budget."],
+        ].map(([t, b]) => (
+          <div key={t} className="rounded-xl border border-slate-200 bg-white p-5">
+            <h2 className="font-sans font-bold text-slate-900">{t}</h2>
+            <p className="text-sm text-slate-600 mt-1">{b}</p>
+          </div>
         ))}
       </div>
-      <div className="mt-6 rounded-2xl border bg-parchment p-5 text-sm"><strong>Approved case studies:</strong> none published yet — placeholders only. <a href="/api/profile-download" className="underline text-terracotta">Download NGO profile (sample PDF text)</a></div>
+      <div className="mt-6 rounded-xl border border-slate-200 bg-slate-50 p-5 text-sm text-slate-600">
+        <strong className="text-slate-900">Case studies:</strong> published only with written partner
+        approval — none published yet.{" "}
+        {profile ? (
+          <a href={profile.url} className="underline text-teal-700 font-bold">Download the approved NGO profile</a>
+        ) : (
+          <>An approved NGO profile document will appear here. Meanwhile, <a href="/contact" className="underline text-teal-700 font-bold">ask the team</a> for one.</>
+        )}
+      </div>
       <div className="mt-6"><EnquiryForm kind="partnership" /></div>
     </div>
   );

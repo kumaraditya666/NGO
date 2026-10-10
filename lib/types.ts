@@ -166,6 +166,8 @@ export interface GalleryItem {
   height?: number;
   /** Display order — lower first. Reorder in Admin → Content → gallery. */
   order?: number;
+  /** Unpublished photos stay private. Undefined counts as published. */
+  published?: boolean;
 }
 export interface Testimonial {
   id: string;
@@ -201,6 +203,10 @@ export interface Enquiry {
 }
 export interface Settings {
   ngoName: string;
+  /** Public display name (working title until the client confirms). */
+  displayName: string;
+  /** Registered legal name. Empty until the client confirms it. */
+  legalName: string;
   tagline: string;
   contactEmail: string;
   contactPhone: string;
@@ -215,5 +221,7 @@ export interface Settings {
   ifsc: string;
   qrImage: string;
   pickupEnabled: boolean;
+  /** Master switch for online donations. Enforced server-side. */
+  donationsEnabled: boolean;
   totalsNote: string;
 }

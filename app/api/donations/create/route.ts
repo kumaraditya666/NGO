@@ -3,10 +3,13 @@ import { donationDetailsSchema } from "@/lib/validation";
 import { readCollection, writeCollection, donationRef, uid } from "@/lib/store";
 import { rateLimit } from "@/lib/rate-limit";
 import { sendMail } from "@/lib/email";
+import { donationsEnabled, DONATIONS_CLOSED } from "@/lib/site";
 import type { Donation } from "@/lib/types";
 import crypto from "node:crypto";
 
 export async function POST(req: Request) {
+  if (!(await donationsEnabled()))
+    return NextResponse.json({ error: DONATIONS_CLOSED }, { status: 503 });
   const ip = req.headers.get("x-forwarded-for") || "anon";
   if (!rateLimit("don-create:" + ip, 10)) return NextResponse.json({ error: "Too many requests" }, { status: 429 });
   const body = await req.json().catch(() => null);

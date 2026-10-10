@@ -1,57 +1,54 @@
-# [NGO NAME] — website (first release)
+# Paaji (working title) — NGO website
 
-Premium, human, credible NGO site: Next.js 14 + TypeScript + Tailwind, demo-mode JSON store, Supabase-ready, Vercel-compatible.
+Next.js 14 + TypeScript + Tailwind. Demo-mode JSON store (`data/*.json`), Supabase-ready schema in `supabase/migrations/`, Vercel-compatible. No build step beyond `npm run build`.
 
-## Quick start (demo mode, no credentials needed)
+## Current posture (important)
+
+- **Online donations are DISABLED** — server-enforced via `donationsEnabled: false` in settings. Payment routes return 503; the Donate page shows an "opening soon" state; the header links to a Support page (volunteer / supplies / contact).
+- **Sample content lives in draft** — programmes, campaigns, events, stories, articles, testimonials, team, supply needs and volunteer roles have no approved content, so public pages show honest empty states. Only the gallery (13 client photos) is live.
+- **Display name "Paaji" is a working title** — client photos show "Shikshaa Sewa Charitable Trust". `displayName` and `legalName` are separate settings; the legal name is empty until confirmed. Do not guess.
+
+## Run locally
 
 ```powershell
 npm install
 Copy-Item .env.example .env.local
 npm run dev
-# open http://localhost:3000
-# admin: http://localhost:3000/admin  (admin@example.org / ChangeMe123! — change immediately)
+# site: http://localhost:3000
+# admin: http://localhost:3000/admin  (bootstrap via ADMIN_EMAIL / ADMIN_PASSWORD in .env.local, then change it)
 ```
 
-Demo mode = local `data/*.json` store, uploads in `data/proofs/` (private, never in `public/`), emails logged to console.
+Note: this repo lives in a OneDrive-synced folder, which breaks Next's dev file
+watcher (stale 404s / `EINVAL readlink` in `.next`). If `npm run dev` misbehaves,
+stop it, delete `.next`, and restart. For day-to-day review `npm run build` +
+`npm start` is the reliable path.
 
-## Production setup
+Other checks: `npx tsc --noEmit`, `npm run build`, `node scripts/verify-workflows.mjs` (needs the server running; set `BASE_URL`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`).
 
-1. Create Supabase project → run `supabase/migrations/001_initial.sql` → create private bucket `proofs`.
-2. Set env (Vercel or `.env.local`):
-   - `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`
-   - `NEXT_PUBLIC_DEMO_MODE=false`
-   - `SESSION_SECRET` (≥32 random chars), `ADMIN_EMAIL`, `ADMIN_PASSWORD`
-   - `SMTP_HOST/PORT/USER/PASS/FROM` for real email
-3. `npm run build; npm start`
-4. Sign in once with bootstrap admin → Admin → Staff → add real staff, delete/change bootstrap password.
-5. Admin → Settings: paste **client-verified** UPI ID, bank details, upload client QR (never reuse reference site's QR).
-6. Replace all sample content (see Transparency → Launch checklist).
-
-## First administrator (secure)
-
-- Staff are stored hashed (scrypt). If `data/staff.json` is empty, login with `ADMIN_EMAIL/ADMIN_PASSWORD` bootstraps one administrator automatically.
-- Then create named staff with roles (administrator / editor / reviewer) and remove the bootstrap credential from env.
+Add gallery photos: drop originals into `public/images/gallery/` (subfolders become albums), run `powershell -ExecutionPolicy Bypass -File scripts/sync-gallery.ps1`, then set alt text in Admin > Content > gallery (or `data/gallery.json`).
 
 ## Admin guide (short)
 
-- **Overview**: confirmed total vs pending — pending never counts.
-- **Donations**: filter by status, search ref/name/UTR. Open proof (staff only). Enter *verified amount* + note → Confirm only after matching bank credit. Rejected never counts. Double-confirm is blocked (409). CSV export is staff-only and contains PII — handle carefully.
-- **Inbox**: volunteers / enquiries / pledges / registrations → new → reviewing → accepted/declined/done.
-- **Content**: JSON editor for programs, campaigns, events, stories, articles, gallery, team, reports, FAQs. `state/publish=draft` stays private.
-- **Settings** (admin only, audited): contact + payment details.
-- **Audit**: every donation decision + settings/staff change.
+- Sign in at `/admin`. Roles: administrator (settings + staff), editor (content + gallery), reviewer (donations + inbox). Every protected API enforces roles server-side.
+- **Checklist** (`/admin/dashboard/checklist`, private): live launch-readiness computed from data + integrations.
+- **Gallery**: upload (JPG/PNG/WebP, 10 at once, unpublished by default), edit alt/caption/album, publish toggle, reorder, delete with confirmation.
+- **Settings**: contact details, display/legal name, `donationsEnabled` + `pickupEnabled` switches. Payment fields stay empty until verified. All changes audited.
+- **Donations**: review queue only matters after donations open. Confirmations require matching a real bank credit; double-confirm is blocked.
 
-## Donation model (manual verification)
+## Production setup
 
-Donor → create (awaiting_payment) → pay externally → submit UTR (submitted_for_verification) → staff confirm/reject. Only `confirmed` counts toward campaign totals; website-online and offline-verified are shown separately, never double-counted. Acknowledgements are plain (not tax certificates).
+1. Supabase project → run `supabase/migrations/001_initial.sql` → private `proofs` bucket.
+2. Env (Vercel or `.env.local`): `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_DEMO_MODE=false`, `SESSION_SECRET` (32+ random chars), `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `SMTP_*` for real email, `NEXT_PUBLIC_SITE_URL` = public URL.
+3. Sign in once, create named staff, rotate the bootstrap credential.
+4. Only enable `donationsEnabled` after the bank account is active AND verified UPI/bank details + client QR are published in Settings.
 
-## Scripts
+## What was verified
 
-- `npm run typecheck`, `npm run build`, `npm run test:workflows` (needs `npm run start` running + `BASE_URL`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`).
+`tsc`, production `next build`, and `scripts/verify-workflows.mjs` (22 checks: payment lock 503s, opening-soon page without payment details, draft privacy 404s, volunteer email-or-phone validation, form persistence honesty, gallery upload auth + validation, checklist gating, role enforcement, event capacity, public page loads).
 
-## Remaining blockers / honest demo notes
+## Still needed / unconfigured
 
-- Supabase + SMTP unconfigured → local store + logged email (see banner).
-- All numbers, stories, testimonials, QR, bank details are **samples** — client must verify.
-- Hindi switch hidden until reviewed translations exist.
-- Future (not built): donor login, recurring gifts, attendance, certificates, personal fundraising.
+- All client content in `CONTENT-CHECKLIST.md` (private, repo-only — never published).
+- Supabase + SMTP (demo store + logged email until then).
+- Razorpay: not integrated by design in this phase; code structure reserves server-side order/signature handling for later.
+- Hindi switch: hidden until reviewed translations exist.

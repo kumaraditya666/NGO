@@ -36,7 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
       </head>
-      <body className="bg-ivory text-forest font-sans antialiased min-h-screen flex flex-col">
+      <body className="bg-ivory text-slate-800 font-sans antialiased min-h-screen flex flex-col">
         <DemoBanner />
         <Header />
         <main className="flex-1">{children}</main>

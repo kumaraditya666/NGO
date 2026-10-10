@@ -3,24 +3,28 @@
 @tailwind utilities;
 
 :root {
-  --ivory: #fdf8f1;
+  --ivory: #fbfaf6;
   --forest: #1a2e1f;
   --terracotta: #c65d3b;
   --gold: #c9a86a;
+  --teal: #0d7c7b;
+  --ink: #1e293b;
 }
 
 html {
   scroll-behavior: smooth;
+  overflow-x: clip;
 }
 
 body {
   background: var(--ivory);
-  color: var(--forest);
+  color: var(--ink);
   font-feature-settings: "ss01";
+  overflow-x: clip;
 }
 
 ::selection {
-  background: #c65d3b;
+  background: #0d7c7b;
   color: #fff;
 }
 
@@ -85,6 +89,6 @@ button:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-  outline: 2px solid #c65d3b;
+  outline: 2px solid #0d7c7b;
   outline-offset: 2px;
 }

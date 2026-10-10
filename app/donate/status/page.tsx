@@ -16,16 +16,16 @@ function Inner() {
     });
   }, [ref, token]);
   return (
-    <div className="mx-auto max-w-2xl px-5 py-12">
-      <h1 className="font-editorial text-3xl">Donation status</h1>
-      {msg && <p className="mt-4 text-sm">{msg}</p>}
+    <div className="mx-auto max-w-2xl px-4 py-12 font-sans">
+      <h1 className="font-sans font-extrabold text-slate-900 text-3xl">Donation status</h1>
+      {msg && <p className="mt-4 text-sm text-slate-600">{msg}</p>}
       {data && (
-        <div className="mt-4 rounded-3xl border bg-white p-6 text-sm">
+        <div className="mt-4 rounded-xl border border-slate-200 bg-white p-6 text-sm text-slate-700">
           <p>Reference: <strong>{data.reference}</strong></p>
           <p>Amount: <strong>₹{Number(data.amount).toLocaleString("en-IN")}</strong></p>
           <p>Status: <strong>{data.status.replace(/_/g, " ")}</strong></p>
-          {data.status === "confirmed" && <a className="mt-3 inline-block rounded-full bg-forest text-white px-5 py-2" href={`/donate/ack?ref=${ref}&token=${token}`}>Download acknowledgement</a>}
-          {data.status !== "confirmed" && <p className="mt-2 text-forest-muted">Awaiting staff verification — confirmation comes only after the bank credit is matched.</p>}
+          {data.status === "confirmed" && <a className="mt-3 inline-block rounded-md bg-teal-700 text-white px-5 py-2 font-sans font-bold" href={`/donate/ack?ref=${ref}&token=${token}`}>Download acknowledgement</a>}
+          {data.status !== "confirmed" && <p className="mt-2 text-slate-500">Awaiting staff verification — confirmation comes only after the bank credit is matched.</p>}
         </div>
       )}
     </div>

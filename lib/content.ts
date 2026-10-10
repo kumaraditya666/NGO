@@ -26,7 +26,10 @@ export async function getArticles(): Promise<Story[]> {
   return readCollection<Story[]>("articles", []);
 }
 export async function getGallery(): Promise<GalleryItem[]> {
-  return readCollection<GalleryItem[]>("gallery", []);
+  const all = await readCollection<GalleryItem[]>("gallery", []);
+  return all
+    .filter((g) => g.published !== false)
+    .sort((a, b) => (a.order ?? 0) - (b.order ?? 0) || a.id.localeCompare(b.id));
 }
 export async function getTestimonials(): Promise<Testimonial[]> {
   return readCollection<Testimonial[]>("testimonials", []);

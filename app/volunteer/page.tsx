@@ -6,10 +6,18 @@ export const metadata = { title: "Volunteer" };
 export const dynamic = "force-dynamic";
 export default async function Volunteer() {
   const [programs, events, opps] = await Promise.all([getPrograms(), getEvents(), getOpportunities()]);
+  const pubPrograms = programs.filter((p) => p.state === "published");
+  const upcoming = events.filter((e) => e.publish === "published" && e.state === "upcoming");
   return (
-    <div className="mx-auto max-w-4xl px-5 py-12">
-      <Reveal><SectionHeading kicker="Volunteer" title="Lend an hour, lift a street" lede="Applications are stored for admin review. We reply by email — demo mode logs messages instead of sending." /></Reveal>
-      <div className="mt-8"><VolunteerForm programs={programs} events={events} opps={opps} /></div>
+    <div className="mx-auto max-w-4xl px-4 py-12 font-sans">
+      <Reveal>
+        <SectionHeading
+          kicker="Volunteer"
+          title="Lend an hour, lift a street"
+          lede="Tell us who you are and how you'd like to help. A person reads every application and replies."
+        />
+      </Reveal>
+      <div className="mt-8"><VolunteerForm programs={pubPrograms} events={upcoming} opps={opps} /></div>
     </div>
   );
 }

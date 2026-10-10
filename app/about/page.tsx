@@ -1,49 +1,61 @@
+import Link from "next/link";
 import Reveal from "@/components/Reveal";
 import { SectionHeading } from "@/components/ui";
-import { getTeam } from "@/lib/content";
+import { readCollection } from "@/lib/store";
 
 export const metadata = { title: "About" };
+export const dynamic = "force-dynamic";
 
 export default async function About() {
-  const team = await getTeam();
+  const settings = await readCollection<any>("settings", {});
+  const display = settings.displayName || settings.ngoName || "Paaji";
+  const legal = (settings.legalName || "").trim();
   return (
-    <div className="mx-auto max-w-6xl px-5 py-12">
-      <Reveal><SectionHeading kicker="About" title="Mission, vision and the people behind them" lede="Sample copy throughout — replace with client-approved text before launch." /></Reveal>
-      <div className="mt-8 grid gap-6 md:grid-cols-3">
-        {[
-          ["Mission (sample)", "To stand with families in [LOCATION] on learning, health and dignified livelihoods — openly and accountably."],
-          ["Vision (sample)", "A neighbourhood where every child learns, every mother is cared for, and work restores the land."],
-          ["Values (sample)", "Consent first · Verify everything · Small promises, kept · Neighbours lead."],
-        ].map(([t, b]) => (
-          <div key={t} className="rounded-3xl border border-forest/10 bg-white p-6"><h2 className="font-editorial text-xl">{t}</h2><p className="mt-2 text-sm text-forest-muted leading-relaxed">{b}</p></div>
-        ))}
-      </div>
+    <div className="mx-auto max-w-[1240px] px-4 py-12 font-sans">
       <Reveal>
-        <div className="mt-8 rounded-3xl bg-forest text-ivory p-6 md:p-10">
-          <h2 className="font-editorial text-2xl">Founder's message (sample)</h2>
-          <p className="mt-3 text-ivory/80 leading-relaxed">“We started with one reading circle and a borrowed shelf. Everything since — every camp, every sapling — has been carried by neighbours. This website exists to keep that trust visible: what we collect, what we spend, what changed.” — Founder Name (sample, replace)</p>
-        </div>
+        <SectionHeading
+          kicker="About"
+          title={display}
+          lede="A community-rooted nonprofit in India. This profile is being confirmed with the NGO — only approved information appears below."
+        />
       </Reveal>
-      <div className="mt-10">
-        <h2 className="font-editorial text-2xl">Milestones (sample — verify before launch)</h2>
-        <ol className="mt-4 space-y-3 border-l-2 border-gold pl-5">
-          {[["2023", "First learning circle opens"], ["2024", "Monthly health camps begin"], ["2025", "Kitchen gardens + plantation drives"], ["2026", "This website: verified donation tracking"]].map(([y, e]) => (
-            <li key={y}><strong>{y}</strong> — {e}</li>
-          ))}
-        </ol>
+
+      <div className="mt-8 grid gap-5 md:grid-cols-2">
+        <Reveal>
+          <div className="h-full rounded-xl border border-slate-200 bg-white p-6 md:p-8">
+            <h2 className="font-sans font-bold text-xl text-slate-900">Identity</h2>
+            <dl className="mt-3 space-y-2 text-[15px]">
+              <div className="flex gap-2"><dt className="text-slate-500 w-32 shrink-0">Public name</dt><dd className="font-semibold text-slate-900">{display}</dd></div>
+              <div className="flex gap-2"><dt className="text-slate-500 w-32 shrink-0">Legal name</dt><dd className="text-slate-600">{legal || "Being confirmed with the trustees."}</dd></div>
+              <div className="flex gap-2"><dt className="text-slate-500 w-32 shrink-0">Registration</dt><dd className="text-slate-600">Being confirmed — published here once approved.</dd></div>
+              <div className="flex gap-2"><dt className="text-slate-500 w-32 shrink-0">Areas served</dt><dd className="text-slate-600">Being confirmed — published here once approved.</dd></div>
+            </dl>
+          </div>
+        </Reveal>
+        <Reveal delay={100}>
+          <div className="h-full rounded-xl border border-slate-200 bg-white p-6 md:p-8">
+            <h2 className="font-sans font-bold text-xl text-slate-900">What we can show today</h2>
+            <ul className="mt-3 space-y-2 text-[15px] text-slate-600">
+              <li>· Photographs from the team&apos;s work — see the <Link href="/gallery" className="font-bold text-teal-700 underline">gallery</Link>.</li>
+              <li>· Programmes, impact figures, team and milestones appear here only after NGO approval.</li>
+              <li>· Anything still in draft stays private and is tracked on a staff-only checklist.</li>
+            </ul>
+            <div className="mt-5 flex flex-wrap gap-3">
+              <Link href="/gallery" className="rounded-md bg-teal-700 px-5 py-2.5 text-sm font-sans font-bold text-white hover:bg-teal-800 transition">See the Work</Link>
+              <Link href="/contact" className="rounded-md border border-slate-300 px-5 py-2.5 text-sm font-sans font-bold text-slate-800 hover:border-slate-500 transition">Contact Us</Link>
+            </div>
+          </div>
+        </Reveal>
       </div>
-      <div className="mt-10">
-        <h2 className="font-editorial text-2xl">Team & trustees</h2>
-        <div className="mt-4 grid gap-4 md:grid-cols-3">
-          {team.map((m) => (
-            <div key={m.id} className="rounded-2xl border border-forest/10 bg-white p-5"><p className="font-semibold">{m.name}</p><p className="text-sm text-terracotta">{m.role}{m.trustee ? " · Trustee" : ""}</p><p className="text-sm text-forest-muted mt-2">{m.bio}</p></div>
-          ))}
-        </div>
-      </div>
-      <div className="mt-10 rounded-2xl border border-forest/10 bg-parchment p-6">
-        <h2 className="font-editorial text-2xl">Areas served</h2>
-        <p className="mt-2 text-sm text-forest-muted">[LOCATION] and nearby wards — exact list to be confirmed by client. No invented coverage is claimed as fact.</p>
-      </div>
+
+      <Reveal>
+        <img
+          src="/images/gallery/large/616425ff-9736-44ae-a30a-2848ce44878d.jpg"
+          alt="Volunteers and children gathered around a Shikshaa Sewa Charitable Trust banner under a tree"
+          loading="lazy"
+          className="mt-8 rounded-xl w-full aspect-[21/9] object-cover border border-slate-200"
+        />
+      </Reveal>
     </div>
   );
 }

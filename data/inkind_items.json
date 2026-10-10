@@ -1,4 +1,1 @@
-[
-  { "id": "ink_books", "label": "Children's books (good condition)", "needed": 500, "unit": "books", "guidelines": "No torn pages; ages 6–14." },
-  { "id": "ink_desk", "label": "Study desks", "needed": 20, "unit": "desks", "guidelines": "Sturdy, usable condition." }
-]
+[]

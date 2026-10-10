@@ -1,3 +1,9 @@
 [
-  { "id": "t1", "name": "Sample neighbour", "role": "Community member (sample)", "quote": "Sample testimonial — only publish genuine, consented testimonials.", "approved": true }
+  {
+    "id": "t1",
+    "name": "Sample neighbour",
+    "role": "Community member (sample)",
+    "quote": "Sample testimonial Ã¢â‚¬â€ only publish genuine, consented testimonials.",
+    "approved": false
+  }
 ]

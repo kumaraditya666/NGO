@@ -18,9 +18,9 @@ export function Field({ label, children, hint }: any) {
     <label className="grid gap-1 text-sm">
       <span className="font-medium">{label}</span>
       {children}
-      {hint && <span className="text-xs text-forest-muted">{hint}</span>}
+      {hint && <span className="text-xs text-slate-500">{hint}</span>}
     </label>
   );
 }
 
-export const inputCls = "border border-forest/20 rounded-xl px-3 py-2.5 bg-white w-full";
+export const inputCls = "border border-slate-300 rounded-md px-3 py-2.5 bg-white w-full font-sans";

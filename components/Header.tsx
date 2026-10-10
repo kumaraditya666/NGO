@@ -6,21 +6,15 @@ import { useEffect, useRef, useState } from "react";
 const primary = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
-  { href: "/programs", label: "Programs" },
-  { href: "/campaigns", label: "Campaigns" },
-  { href: "/impact", label: "Impact" },
+  { href: "/programs", label: "Our Work" },
   { href: "/gallery", label: "Gallery" },
-  { href: "/events", label: "Events" },
+  { href: "/contact", label: "Contact" },
 ];
 
-const more = [
+const involved = [
   { href: "/volunteer", label: "Volunteer" },
-  { href: "/corporate", label: "Corporate partnerships" },
-  { href: "/in-kind", label: "In-kind giving" },
-  { href: "/articles", label: "Articles" },
-  { href: "/transparency", label: "Transparency" },
-  { href: "/faq", label: "FAQ" },
-  { href: "/contact", label: "Contact" },
+  { href: "/in-kind", label: "Give Supplies" },
+  { href: "/corporate", label: "Corporate Partnerships" },
 ];
 
 export default function Header() {
@@ -65,24 +59,23 @@ export default function Header() {
           </span>
         </Link>
 
-        <nav className="hidden lg:flex items-center gap-5 text-[14.5px] font-sans font-semibold" aria-label="Primary">
-          {primary.map((l) => (
-            <Link key={l.href} href={l.href} className={active(l.href)}>
-              {l.label}
-            </Link>
-          ))}
+        <nav className="hidden lg:flex items-center gap-6 text-[14.5px] font-sans font-semibold" aria-label="Primary">
+          <Link href="/" className={active("/")}>Home</Link>
+          <Link href="/about" className={active("/about")}>About</Link>
+          <Link href="/programs" className={active("/programs")}>Our Work</Link>
+          <Link href="/gallery" className={active("/gallery")}>Gallery</Link>
           <div className="relative" ref={dropRef}>
             <button
               onClick={() => setDrop(!drop)}
               aria-expanded={drop}
               aria-haspopup="true"
-              className="text-slate-700 hover:text-teal-700 flex items-center gap-1"
+              className="text-slate-700 hover:text-teal-700 flex items-center gap-1 font-semibold"
             >
-              More <span aria-hidden className={`text-xs transition-transform ${drop ? "rotate-180" : ""}`}>▾</span>
+              Get Involved <span aria-hidden className={`text-xs transition-transform ${drop ? "rotate-180" : ""}`}>▾</span>
             </button>
             {drop && (
-              <div className="absolute right-0 top-full mt-2 w-60 rounded-lg border border-slate-200 bg-white shadow-xl py-2" role="menu">
-                {more.map((l) => (
+              <div className="absolute left-0 top-full mt-2 w-60 rounded-lg border border-slate-200 bg-white shadow-xl py-2" role="menu">
+                {involved.map((l) => (
                   <Link
                     key={l.href}
                     href={l.href}
@@ -96,20 +89,21 @@ export default function Header() {
               </div>
             )}
           </div>
+          <Link href="/contact" className={active("/contact")}>Contact</Link>
         </nav>
 
         <div className="flex items-center gap-2 shrink-0">
           <Link
-            href="/donate"
+            href="/support"
             className="rounded-md bg-teal-600 px-5 md:px-6 py-2.5 text-sm font-sans font-bold text-white hover:bg-teal-700 transition"
           >
-            Donate
+            Support Us
           </Link>
           <button
             onClick={() => setOpen(!open)}
             aria-expanded={open}
             aria-label="Toggle menu"
-            className="lg:hidden rounded-md border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700"
+            className="lg:hidden rounded-md border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 focus-visible:outline-2 focus-visible:outline-teal-600"
           >
             {open ? "Close" : "Menu"}
           </button>
@@ -118,7 +112,7 @@ export default function Header() {
 
       {open && (
         <nav className="lg:hidden border-t border-slate-200 px-4 py-3 bg-white max-h-[70vh] overflow-y-auto" aria-label="Mobile">
-          {[...primary, ...more].map((l) => (
+          {[...primary.slice(0, 4)].map((l) => (
             <Link
               key={l.href}
               href={l.href}
@@ -128,12 +122,30 @@ export default function Header() {
               {l.label}
             </Link>
           ))}
+          <p className="pt-3 pb-1 text-[12px] font-sans font-bold uppercase tracking-widest text-slate-400">Get Involved</p>
+          {involved.map((l) => (
+            <Link
+              key={l.href}
+              href={l.href}
+              onClick={() => setOpen(false)}
+              className={`block py-2.5 pl-3 text-[15px] font-sans font-semibold border-b border-slate-100 ${active(l.href)}`}
+            >
+              {l.label}
+            </Link>
+          ))}
           <Link
-            href="/donate"
+            href="/contact"
+            onClick={() => setOpen(false)}
+            className={`block py-2.5 text-[15px] font-sans font-semibold ${active("/contact")}`}
+          >
+            Contact
+          </Link>
+          <Link
+            href="/support"
             onClick={() => setOpen(false)}
             className="mt-3 block rounded-md bg-teal-600 px-4 py-3 text-center text-white font-bold"
           >
-            Donate
+            Support Us
           </Link>
         </nav>
       )}

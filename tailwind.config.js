@@ -4,8 +4,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        ivory: "#FDF8F1",
-        parchment: "#F7EFE3",
+        ivory: "#FBFAF6",
+        parchment: "#F4F1EA",
         forest: {
           DEFAULT: "#1A2E1F",
           deep: "#122117",

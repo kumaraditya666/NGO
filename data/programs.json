@@ -7,11 +7,18 @@
     "description": "Sample content — replace with client-approved program description before launch. This program would describe who is served, where, and how outcomes are verified.",
     "location": "[LOCATION] — sample",
     "challenge": "Sample: many first-generation learners lack quiet study space and learning support.",
-    "activities": ["After-school learning circles", "Community library", "Scholarship mentoring"],
-    "goals": ["Improve foundational literacy", "Reduce dropouts"],
+    "activities": [
+      "After-school learning circles",
+      "Community library",
+      "Scholarship mentoring"
+    ],
+    "goals": [
+      "Improve foundational literacy",
+      "Reduce dropouts"
+    ],
     "outcomes": "Sample outcomes pending client verification. Do not publish as fact.",
     "image": "/placeholders/program-edu.svg",
-    "state": "published",
+    "state": "draft",
     "order": 1
   },
   {
@@ -22,11 +29,18 @@
     "description": "Sample content — replace with client-approved program description before launch.",
     "location": "[LOCATION] — sample",
     "challenge": "Sample: preventive care access is limited in served areas.",
-    "activities": ["Monthly health camps", "Nutrition workshops", "Referral support"],
-    "goals": ["Increase health awareness", "Support maternal health"],
+    "activities": [
+      "Monthly health camps",
+      "Nutrition workshops",
+      "Referral support"
+    ],
+    "goals": [
+      "Increase health awareness",
+      "Support maternal health"
+    ],
     "outcomes": "Sample outcomes pending verification.",
     "image": "/placeholders/program-health.svg",
-    "state": "published",
+    "state": "draft",
     "order": 2
   },
   {
@@ -37,11 +51,18 @@
     "description": "Sample content — replace with client-approved program description before launch.",
     "location": "[LOCATION] — sample",
     "challenge": "Sample: seasonal income instability and degraded commons.",
-    "activities": ["Tailoring & digital skills", "Kitchen gardens", "Plantation drives"],
-    "goals": ["Supplement household income", "Restore green cover"],
+    "activities": [
+      "Tailoring & digital skills",
+      "Kitchen gardens",
+      "Plantation drives"
+    ],
+    "goals": [
+      "Supplement household income",
+      "Restore green cover"
+    ],
     "outcomes": "Sample outcomes pending verification.",
     "image": "/placeholders/program-green.svg",
-    "state": "published",
+    "state": "draft",
     "order": 3
   }
 ]
