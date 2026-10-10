@@ -127,6 +127,41 @@ async function main() {
   const home2 = await (await fetch(`${BASE}/`)).text();
   ok("H2 videos section hidden when empty", !home2.includes("Stories from Our Work"));
 
+  // J. notifications: jobs recorded honestly, retry is idempotent, staff-only
+  r = await fetch(`${BASE}/api/volunteer`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: "Notify Iso", email: `notify-${T}@test.co`, phone: "9111111111", consent: true }) });
+  const jv = await j(r);
+  ok("J1 volunteer submit succeeds (save first)", r.ok && !!jv.id && jv.id !== "ok");
+  r = await fetch(`${BASE}/api/admin/notifications`, { headers: H });
+  const jobs = (await j(r)).jobs || [];
+  const mine = jobs.filter((x) => x.refId === jv.id);
+  ok("J2 outbox jobs recorded for the submission", mine.length >= 1, `jobs=${mine.length}`);
+  ok("J3 unconfigured mail recorded as failed (never fake-sent)", mine.length > 0 && mine.every((x) => x.status === "failed" && /not configured/i.test(x.lastError || "")));
+  const before = mine.length;
+  if (mine.length > 0) {
+    r = await fetch(`${BASE}/api/admin/notifications`, { method: "POST", headers: HJ, body: JSON.stringify({ id: mine[0].id }) });
+    const rj = await j(r);
+    ok("J4 retry accepted", r.ok);
+    r = await fetch(`${BASE}/api/admin/notifications`, { headers: H });
+    const after = ((await j(r)).jobs || []).filter((x) => x.refId === jv.id);
+    ok("J5 retry reuses the job (no duplicates)", after.length === before);
+  } else {
+    ok("J4 retry accepted", false, "no jobs to retry");
+    ok("J5 retry reuses the job (no duplicates)", false, "no jobs to retry");
+  }
+  r = await fetch(`${BASE}/api/admin/notifications`);
+  ok("J6 notifications require staff", r.status === 401);
+  // event registration dedupe
+  const evBody = { eventId: "evt_camp", name: "Ev Iso", email: `ev-${T}@test.co`, seats: 1, consent: true };
+  r = await fetch(`${BASE}/api/events/register`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(evBody) });
+  const regNote = r.ok ? "" : ` (event may be draft: ${r.status})`;
+  if (r.ok) {
+    const r1 = await j(r);
+    r = await fetch(`${BASE}/api/events/register`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(evBody) });
+    ok("J7 duplicate registration idempotent" + regNote, r.ok);
+  } else {
+    ok("J7 duplicate registration idempotent" + regNote, r.status === 404);
+  }
+
   // I. public pages + event capacity + footer admin link
   for (const u of ["/", "/gallery", "/volunteer", "/support", "/transparency", "/contact", "/admin/login", "/admin/forgot"]) {
     r = await fetch(`${BASE}${u}`);

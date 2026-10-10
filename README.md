@@ -41,7 +41,7 @@ Add gallery photos: drop originals into `public/images/gallery/` (subfolders bec
 ## Production setup
 
 1. Supabase project → run `supabase/migrations/001_initial.sql` then `002_gallery_videos.sql` (prepared tables; app still uses the JSON store until wired) → private `proofs` bucket (+ `gallery`, `gallery-originals` when wiring uploads).
-2. Env (Vercel or `.env.local`): `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_DEMO_MODE=false`, `SESSION_SECRET` (32+ random chars), `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `SMTP_*` for real email, `NEXT_PUBLIC_SITE_URL` = public URL.
+2. Env (Vercel or `.env.local`): `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_DEMO_MODE=false`, `SESSION_SECRET` (32+ random chars), `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `ADMIN_NOTIFICATION_EMAIL` (staff inbox for form notifications — or set it in Admin > Settings), `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM` (must be a sender address verified with your email provider), `NEXT_PUBLIC_SITE_URL` = public URL. All secrets stay server-side; nothing secret is ever in browser code or committed.
 3. Sign in once, create named staff, rotate the bootstrap credential.
 4. Only enable `donationsEnabled` after the bank account is active AND verified UPI/bank details + client QR are published in Settings.
 
@@ -49,9 +49,18 @@ Add gallery photos: drop originals into `public/images/gallery/` (subfolders bec
 
 `tsc`, production `next build`, and `scripts/verify-workflows.mjs` (22 checks: payment lock 503s, opening-soon page without payment details, draft privacy 404s, volunteer email-or-phone validation, form persistence honesty, gallery upload auth + validation, checklist gating, role enforcement, event capacity, public page loads).
 
+## Email notifications (outbox)
+
+Every public form saves first, then queues emails in a durable outbox (`data/outbox.json`, prepared table `003_notifications.sql`):
+- Staff notification to `adminNotificationEmail` (Settings) or `ADMIN_NOTIFICATION_EMAIL`, with Reply-To set to the submitter. Confirmed-donation notices are queued only after staff verification.
+- Submitter acknowledgement (only when they gave an email address).
+- Bounded retries (3 attempts: 1 min, 10 min, 1 h). Failures never undo the saved submission and never claim delivery. Retry reuses the same job — no duplicates. Admin > Notifications shows pending/sent/failed with a retry action; provider acceptance (message ID) is recorded but is not proof of delivery.
+- Without SMTP credentials nothing is sent and jobs record the honest failure — the site keeps working and forms keep saving.
+
 ## Still needed / unconfigured
 
 - All client content in `CONTENT-CHECKLIST.md` (private, repo-only — never published).
-- Supabase + SMTP (demo store + logged email until then).
+- Supabase + SMTP credentials (see env list above) for persistent data and real delivery.
+- A verified sender domain/address for `SMTP_FROM` at the email provider.
 - Razorpay: not integrated by design in this phase; code structure reserves server-side order/signature handling for later.
 - Hindi switch: hidden until reviewed translations exist.

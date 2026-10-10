@@ -6,7 +6,7 @@ import { emailConfigured, isDemoMode } from "@/lib/config";
 export async function GET(req: Request) {
   const g = requireApiRole(req, ["editor", "reviewer"]);
   if ("error" in g) return g.error;
-  const [settings, programs, campaigns, events, stories, articles, gallery, team, reports, opps, items] = await Promise.all([
+  const [settings, programs, campaigns, events, stories, articles, gallery, team, reports, opps, items, outbox] = await Promise.all([
     readCollection<any>("settings", {}),
     readCollection<any[]>("programs", []),
     readCollection<any[]>("campaigns", []),
@@ -18,7 +18,9 @@ export async function GET(req: Request) {
     readCollection<any[]>("reports", []),
     readCollection<any[]>("opportunities", []),
     readCollection<any[]>("inkind_items", []),
+    readCollection<any[]>("outbox", []),
   ]);
+  const failedMail = outbox.filter((m: any) => m.status === "failed").length;
   const pub = (a: any[], k: string) => a.filter((x) => (x[k] || "draft") !== "draft").length;
   const draft = (a: any[], k: string) => a.filter((x) => (x[k] || "draft") === "draft").length;
   const groups = [
@@ -54,7 +56,9 @@ export async function GET(req: Request) {
         { label: "Verified payment details published", done: Boolean((settings.upiId || "").trim() && (settings.accountNumber || "").trim()), hint: "Never show samples publicly" },
         { label: "Active appeal published", done: pub(campaigns, "publish") > 0, hint: `${draft(campaigns, "publish")} in draft` },
         { label: "Supabase connected (persistent data)", done: !isDemoMode, hint: isDemoMode ? "Local JSON store — wiped on redeploy" : "Connected" },
-        { label: "Transactional email configured", done: emailConfigured, hint: emailConfigured ? "Acknowledgements send" : "Messages logged only; forms still save" },
+        { label: "Transactional email configured", done: emailConfigured, hint: emailConfigured ? "Notifications send via outbox" : "Outbox records failures; forms still save" },
+        { label: "Admin notification recipient set", done: Boolean(((settings.adminNotificationEmail || process.env.ADMIN_NOTIFICATION_EMAIL || "") as string).trim()), hint: "Settings > adminNotificationEmail or ADMIN_NOTIFICATION_EMAIL env" },
+        { label: "No failed notification emails", done: failedMail === 0, hint: failedMail ? `${failedMail} failed — see Admin > Notifications` : "Outbox clear" },
       ],
     },
   ];

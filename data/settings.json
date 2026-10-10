@@ -17,5 +17,6 @@
   "qrImage": "",
   "pickupEnabled": false,
   "donationsEnabled": false,
+  "adminNotificationEmail": "",
   "totalsNote": "Website totals show only donations confirmed through this website. Separately verified offline contributions are listed alongside and never double-counted."
 }

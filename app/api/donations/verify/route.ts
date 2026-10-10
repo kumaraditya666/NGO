@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { donationVerifySchema } from "@/lib/validation";
 import { readCollection, writeCollection, uid } from "@/lib/store";
 import { rateLimit } from "@/lib/rate-limit";
-import { sendMail } from "@/lib/email";
+import { enqueueNotify, processOutbox } from "@/lib/notify";
 import { donationsEnabled, DONATIONS_CLOSED } from "@/lib/site";
 import type { Donation } from "@/lib/types";
 
@@ -37,6 +37,15 @@ export async function POST(req: Request) {
   const hist = await readCollection<any[]>("donation_history", []);
   hist.unshift({ id: uid("dh"), donationId: don.id, from: "awaiting_payment", to: "submitted_for_verification", by: "donor", note: cannotFindRef ? "cannot find ref" : utr, at: new Date().toISOString() });
   await writeCollection("donation_history", hist);
-  await sendMail({ to: don.email, subject: `Donation ${reference} — submitted, awaiting verification`, html: `<p>Hi ${don.name},</p><p>We received your reference and it is <b>awaiting payment verification</b>. We confirm only after matching the bank credit. ${dupes.length ? "Note: a similar reference exists and staff will double-check." : ""}</p>` });
+  await enqueueNotify({
+    purpose: "donation-update",
+    refKind: "donations",
+    refId: `${don.id}:submitted`,
+    to: don.email,
+    subject: `Donation ${reference} — submitted, awaiting verification`,
+    html: `<p>Hi ${don.name},</p><p>We received your reference and it is <b>awaiting payment verification</b>. We confirm only after matching the bank credit. ${dupes.length ? "Note: a similar reference exists and staff will double-check." : ""}</p>`,
+    text: `Hi ${don.name}, your reference is awaiting payment verification. We confirm only after matching the bank credit.`,
+  });
+  await processOutbox().catch((e) => console.error("[notify] donation-verify notice failed:", e));
   return NextResponse.json({ reference, token: (don as any).token, status: don.status });
 }

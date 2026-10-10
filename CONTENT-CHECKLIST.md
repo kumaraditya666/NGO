@@ -44,6 +44,8 @@ unpublished pending the exact registered information — do not guess.
 - [ ] Phone numbers visible on some banners/signage in photos — confirm all may publish
 
 ## Integrations
-- [ ] Supabase (migrations in `supabase/migrations/`) for persistent data
-- [ ] SMTP for real acknowledgement emails (forms save + log until then)
+- [ ] Supabase (migrations `001`, `002`, `003` in `supabase/migrations/`) for persistent data
+- [ ] SMTP credentials: `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`
+- [ ] Verified sender domain/address for `SMTP_FROM` at the email provider
+- [ ] Staff notification recipient: `ADMIN_NOTIFICATION_EMAIL` env or Settings > adminNotificationEmail
 - [ ] `NEXT_PUBLIC_SITE_URL` + strong `ADMIN_*` / `SESSION_SECRET` for production

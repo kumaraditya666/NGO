@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { donationDetailsSchema } from "@/lib/validation";
 import { readCollection, writeCollection, donationRef, uid } from "@/lib/store";
 import { rateLimit } from "@/lib/rate-limit";
-import { sendMail } from "@/lib/email";
+import { enqueueNotify, processOutbox } from "@/lib/notify";
 import { donationsEnabled, DONATIONS_CLOSED } from "@/lib/site";
 import type { Donation } from "@/lib/types";
 import crypto from "node:crypto";
@@ -30,6 +30,15 @@ export async function POST(req: Request) {
   const hist = await readCollection<any[]>("donation_history", []);
   hist.unshift({ id: uid("dh"), donationId: rec.id, from: "created", to: "awaiting_payment", by: "donor", at: now });
   await writeCollection("donation_history", hist);
-  await sendMail({ to: d.email, subject: `Donation ${reference} — pay, then submit reference`, html: `<p>Hi ${d.name},</p><p>Your donation reference is <b>${reference}</b> for ₹${d.amount}. Pay in your UPI/bank app, then submit your UTR on the site. This email does NOT confirm payment — staff verify every credit manually.</p><p>Private status link: /donate/status?ref=${reference}&token=${token}</p>` });
+  await enqueueNotify({
+    purpose: "donation-update",
+    refKind: "donations",
+    refId: `${rec.id}:created`,
+    to: d.email,
+    subject: `Donation ${reference} — pay, then submit reference`,
+    html: `<p>Hi ${d.name},</p><p>Your donation reference is <b>${reference}</b> for ₹${d.amount}. Pay in your UPI/bank app, then submit your UTR on the site. This message does NOT confirm payment — staff verify every credit manually.</p><p>Private status link: /donate/status?ref=${reference}&token=${token}</p>`,
+    text: `Hi ${d.name}, your donation reference is ${reference} for Rs.${d.amount}. This message does NOT confirm payment.`,
+  });
+  await processOutbox().catch((e) => console.error("[notify] donation-create notice failed:", e));
   return NextResponse.json({ reference, token, amount: d.amount, status: "awaiting_payment" });
 }

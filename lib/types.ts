@@ -247,5 +247,7 @@ export interface Settings {
   pickupEnabled: boolean;
   /** Master switch for online donations. Enforced server-side. */
   donationsEnabled: boolean;
+  /** Staff inbox for submission notifications (server-side; never public). */
+  adminNotificationEmail: string;
   totalsNote: string;
 }

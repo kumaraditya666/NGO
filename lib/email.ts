@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer";
 import { emailConfigured } from "./config";
 
-type Mail = { to: string; subject: string; html: string; text?: string };
+type Mail = { to: string; subject: string; html: string; text?: string; replyTo?: string };
 
 export async function sendMail(m: Mail): Promise<{ demo: boolean; id?: string }> {
   if (!emailConfigured) {
@@ -17,6 +17,7 @@ export async function sendMail(m: Mail): Promise<{ demo: boolean; id?: string }>
   const info = await transporter.sendMail({
     from: process.env.SMTP_FROM || "NGO <hello@example.org>",
     to: m.to,
+    replyTo: m.replyTo,
     subject: m.subject,
     html: m.html,
     text: m.text || m.subject,
