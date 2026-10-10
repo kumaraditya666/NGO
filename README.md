@@ -1,4 +1,4 @@
-# Paaji (working title) — NGO website
+# Shikshaa Sewa Charitable Trust — website
 
 Next.js 14 + TypeScript + Tailwind. Demo-mode JSON store (`data/*.json`), Supabase-ready schema in `supabase/migrations/`, Vercel-compatible. No build step beyond `npm run build`.
 

@@ -23,18 +23,18 @@ export default async function Corporate() {
           ["Programme support", "Co-fund an approved programme with an open budget."],
         ].map(([t, b]) => (
           <div key={t} className="rounded-xl border border-slate-200 bg-white p-5">
-            <h2 className="font-sans font-bold text-slate-900">{t}</h2>
+            <h2 className="font-sans font-bold text-ink">{t}</h2>
             <p className="text-sm text-slate-600 mt-1">{b}</p>
           </div>
         ))}
       </div>
-      <div className="mt-6 rounded-xl border border-slate-200 bg-slate-50 p-5 text-sm text-slate-600">
-        <strong className="text-slate-900">Case studies:</strong> published only with written partner
+      <div className="mt-6 rounded-xl border border-slate-200 bg-cream p-5 text-sm text-slate-600">
+        <strong className="text-ink">Case studies:</strong> published only with written partner
         approval — none published yet.{" "}
         {profile ? (
-          <a href={profile.url} className="underline text-teal-700 font-bold">Download the approved NGO profile</a>
+          <a href={profile.url} className="underline text-brand font-bold">Download the approved NGO profile</a>
         ) : (
-          <>An approved NGO profile document will appear here. Meanwhile, <a href="/contact" className="underline text-teal-700 font-bold">ask the team</a> for one.</>
+          <>An approved NGO profile document will appear here. Meanwhile, <a href="/contact" className="underline text-brand font-bold">ask the team</a> for one.</>
         )}
       </div>
       <div className="mt-6"><EnquiryForm kind="partnership" /></div>

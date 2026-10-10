@@ -1,8 +1,8 @@
 # Client-content checklist — private (repo only, never published on the site)
 
-Working title on the site: **"Paaji"**. Client photographs show **"Shikshaa Sewa
-Charitable Trust"** — confirm the public display name and the registered legal
-name before changing anything. Do not guess.
+Working display name (client-supplied): **"Shikshaa Sewa Charitable Trust"**,
+slogan "Learn today, lead tomorrow". Legal registration details are still
+unpublished pending the exact registered information — do not guess.
 
 ## Identity & contact
 - [ ] Public display name + registered legal name (`Admin > Settings`, then About/Transparency update automatically)
@@ -37,6 +37,8 @@ name before changing anything. Do not guess.
 
 ## Photography (gallery live with 13 client photos)
 - [x] 13 client photos published with factual alt text, no captions invented
+- [ ] `public/logo.png` saved from the supplied logo file (header wired, favicon pending)
+- [ ] Individual video/reel URLs + uploaded cover images (`data/videos.json` is empty, section hidden)
 - [ ] Consent records for every recognisable person
 - [ ] Replace/extend with programme, hero and event photos as approved
 - [ ] Phone numbers visible on some banners/signage in photos — confirm all may publish

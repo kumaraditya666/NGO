@@ -28,14 +28,14 @@ export default async function Donate() {
       </Reveal>
       {!open ? (
         <Reveal>
-          <div className="mt-8 rounded-xl border border-slate-200 bg-slate-50 p-7 md:p-10">
-            <h2 className="font-sans font-extrabold text-slate-900 text-2xl">Meanwhile, you can still help</h2>
+          <div className="mt-8 rounded-xl border border-slate-200 bg-cream p-7 md:p-10">
+            <h2 className="font-sans font-extrabold text-ink text-2xl">Meanwhile, you can still help</h2>
             <p className="mt-2 text-slate-600">
               No payment details are shown here on purpose — there is nowhere to send money yet.
               These actions work today:
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <Link href="/volunteer" className="rounded-md bg-teal-700 px-6 py-3 font-sans font-bold text-white hover:bg-teal-800 transition">
+              <Link href="/volunteer" className="rounded-md bg-brand px-6 py-3 font-sans font-bold text-white hover:bg-brand-dark transition">
                 Become a Volunteer
               </Link>
               <Link href="/in-kind" className="rounded-md border border-slate-300 px-6 py-3 font-sans font-bold text-slate-800 hover:border-slate-500 transition">

@@ -21,6 +21,7 @@ export default function Header() {
   const path = usePathname();
   const [open, setOpen] = useState(false);
   const [drop, setDrop] = useState(false);
+  const [logoOk, setLogoOk] = useState(true);
   const dropRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -42,19 +43,31 @@ export default function Header() {
   }, []);
 
   const active = (h: string) =>
-    path === h ? "text-teal-700" : "text-slate-700 hover:text-teal-700";
+    path === h ? "text-brand" : "text-slate-700 hover:text-brand-dark";
 
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-slate-200">
       <div className="mx-auto max-w-[1240px] px-4 flex items-center justify-between h-[68px] gap-4">
-        <Link href="/" className="flex items-center gap-2.5 shrink-0" aria-label="Paaji — home">
-          <span className="grid h-9 w-9 place-items-center rounded-md bg-teal-600 text-white font-sans font-extrabold text-lg">
-            P
-          </span>
+        <Link href="/" className="flex items-center gap-2.5 shrink-0" aria-label="Shikshaa Sewa Charitable Trust — home">
+          {logoOk ? (
+            <img
+              src="/logo.png"
+              alt="Shikshaa Sewa Charitable Trust"
+              onError={() => setLogoOk(false)}
+              className="h-11 w-auto rounded-sm bg-white"
+            />
+          ) : (
+            <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-md bg-brand font-sans font-extrabold text-white text-2xl">
+              S
+            </span>
+          )}
           <span className="leading-tight">
-            <span className="block font-sans font-extrabold text-[19px] text-slate-900">Paaji</span>
-            <span className="block text-[10px] font-sans uppercase tracking-[0.16em] text-slate-500">
-              Hope · rooted
+            <span className="block font-sans font-extrabold text-[18px] text-ink">Shikshaa Sewa</span>
+            <span className="block text-[10px] font-sans font-bold uppercase tracking-[0.14em] text-slate-500">
+              Charitable Trust
+            </span>
+            <span className="hidden xl:block text-[10.5px] font-sans italic text-slate-500">
+              Learn today, lead tomorrow
             </span>
           </span>
         </Link>
@@ -69,7 +82,7 @@ export default function Header() {
               onClick={() => setDrop(!drop)}
               aria-expanded={drop}
               aria-haspopup="true"
-              className="text-slate-700 hover:text-teal-700 flex items-center gap-1 font-semibold"
+              className="text-slate-700 hover:text-brand-dark flex items-center gap-1 font-semibold"
             >
               Get Involved <span aria-hidden className={`text-xs transition-transform ${drop ? "rotate-180" : ""}`}>▾</span>
             </button>
@@ -81,7 +94,7 @@ export default function Header() {
                     href={l.href}
                     role="menuitem"
                     onClick={() => setDrop(false)}
-                    className="block px-4 py-2 text-slate-700 hover:bg-slate-50 hover:text-teal-700"
+                    className="block px-4 py-2 text-slate-700 hover:bg-cream hover:text-brand-dark"
                   >
                     {l.label}
                   </Link>
@@ -95,7 +108,7 @@ export default function Header() {
         <div className="flex items-center gap-2 shrink-0">
           <Link
             href="/support"
-            className="rounded-md bg-teal-600 px-5 md:px-6 py-2.5 text-sm font-sans font-bold text-white hover:bg-teal-700 transition"
+            className="rounded-md bg-brand px-5 md:px-6 py-2.5 text-sm font-sans font-bold text-white hover:bg-brand-dark transition"
           >
             Support Us
           </Link>
@@ -103,7 +116,7 @@ export default function Header() {
             onClick={() => setOpen(!open)}
             aria-expanded={open}
             aria-label="Toggle menu"
-            className="lg:hidden rounded-md border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 focus-visible:outline-2 focus-visible:outline-teal-600"
+            className="lg:hidden rounded-md border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 focus-visible:outline-2 focus-visible:outline-brand"
           >
             {open ? "Close" : "Menu"}
           </button>
@@ -143,7 +156,7 @@ export default function Header() {
           <Link
             href="/support"
             onClick={() => setOpen(false)}
-            className="mt-3 block rounded-md bg-teal-600 px-4 py-3 text-center text-white font-bold"
+            className="mt-3 block rounded-md bg-brand px-4 py-3 text-center text-white font-bold"
           >
             Support Us
           </Link>

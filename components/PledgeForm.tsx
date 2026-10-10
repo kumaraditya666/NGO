@@ -6,8 +6,8 @@ export default function PledgeForm({ pickup }: { pickup: boolean }) {
   const [f, setF] = useState({ name: "", email: "", phone: "", item: "", qty: "", message: "", consent: false });
   const set = (k: string, v: any) => setF({ ...f, [k]: v });
   if (ok) return (
-    <div className="rounded-xl border border-slate-200 bg-slate-50 p-6 font-sans">
-      <p className="font-sans font-bold text-slate-900">Pledge received.</p>
+    <div className="rounded-xl border border-slate-200 bg-cream p-6 font-sans">
+      <p className="font-sans font-bold text-ink">Pledge received.</p>
       <p className="text-sm text-slate-600 mt-1">{msg}</p>
     </div>
   );
@@ -33,7 +33,7 @@ export default function PledgeForm({ pickup }: { pickup: boolean }) {
       <Field label="Item you can give *"><input required className={inputCls} value={f.item} onChange={(e) => set("item", e.target.value)} placeholder="e.g. children's storybooks in good condition" /></Field>
       <Field label="Condition and location"><textarea className={inputCls} rows={3} value={f.message} onChange={(e) => set("message", e.target.value)} placeholder="condition, your area…" /></Field>
       <label className="text-sm flex gap-2 text-slate-700"><input type="checkbox" required checked={f.consent} onChange={(e) => set("consent", e.target.checked)} /> I consent to being contacted about this pledge. *</label>
-      <button className="rounded-md bg-teal-700 text-white px-6 py-3 font-sans font-bold hover:bg-teal-800 transition">Pledge item</button>
+      <button className="rounded-md bg-brand text-white px-6 py-3 font-sans font-bold hover:bg-brand-dark transition">Pledge item</button>
       {msg && <p className="text-sm text-slate-600" role="status">{msg}</p>}
     </form>
   );

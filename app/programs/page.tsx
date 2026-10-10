@@ -17,14 +17,14 @@ export default async function Programs() {
       </Reveal>
       {programs.length === 0 ? (
         <Reveal>
-          <div className="mt-8 rounded-xl border border-slate-200 bg-slate-50 p-8 text-center">
-            <p className="font-sans font-bold text-lg text-slate-900">Programme details are being confirmed</p>
+          <div className="mt-8 rounded-xl border border-slate-200 bg-cream p-8 text-center">
+            <p className="font-sans font-bold text-lg text-ink">Programme details are being confirmed</p>
             <p className="mt-2 text-slate-600 max-w-xl mx-auto">
               The NGO has not approved programme write-ups yet. Meanwhile, photographs from
               the field are already public in the gallery.
             </p>
             <div className="mt-5 flex flex-wrap justify-center gap-3">
-              <Link href="/gallery" className="rounded-md bg-teal-700 px-5 py-2.5 text-sm font-sans font-bold text-white hover:bg-teal-800 transition">Open Gallery</Link>
+              <Link href="/gallery" className="rounded-md bg-brand px-5 py-2.5 text-sm font-sans font-bold text-white hover:bg-brand-dark transition">Open Gallery</Link>
               <Link href="/contact" className="rounded-md border border-slate-300 px-5 py-2.5 text-sm font-sans font-bold text-slate-800 hover:border-slate-500 transition">Ask Us Anything</Link>
             </div>
           </div>
@@ -35,9 +35,9 @@ export default async function Programs() {
             <Link key={p.id} href={`/programs/${p.slug}`} className="rounded-xl overflow-hidden border border-slate-200 bg-white hover:shadow-lg transition block">
               <img src={p.image} alt={p.title} className="aspect-[16/10] object-cover w-full" loading="lazy" />
               <div className="p-5">
-                <h2 className="font-sans font-bold text-xl text-slate-900">{p.title}</h2>
+                <h2 className="font-sans font-bold text-xl text-ink">{p.title}</h2>
                 <p className="text-sm text-slate-600 mt-2">{p.summary}</p>
-                <p className="mt-3 text-sm font-sans font-bold text-teal-700">Explore →</p>
+                <p className="mt-3 text-sm font-sans font-bold text-brand">Explore →</p>
               </div>
             </Link>
           ))}

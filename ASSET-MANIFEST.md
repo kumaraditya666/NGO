@@ -1,5 +1,14 @@
 # Asset manifest — site photography
 
+## Logo (pending file)
+Client-supplied logo (open book, colourful figures, sunrise, graduation cap) is
+wired as `public/logo.png` (header, alt "Shikshaa Sewa Charitable Trust") with a
+favicon to follow from its symbol portion. The attached file has NOT been saved
+into the repo yet — save the original as `public/logo.png`, then crop excess
+outer white space without touching artwork or lettering, optimise, and derive
+the favicon. Instagram: https://www.instagram.com/shikshaasewa_charitabletrust/
+(linked from the top bar, footer and Contact page — no other social profiles).
+
 ## Client gallery photos (live, `public/images/gallery/`)
 13 client-supplied photographs showing volunteers, children, and a Shikshaa Sewa
 Charitable Trust banner. Served as EXIF-free `thumbs/` (grid) and `large/`

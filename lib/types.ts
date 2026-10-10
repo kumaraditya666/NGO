@@ -169,6 +169,20 @@ export interface GalleryItem {
   /** Unpublished photos stay private. Undefined counts as published. */
   published?: boolean;
 }
+
+export interface VideoItem {
+  id: string;
+  title: string;
+  /** Uploaded cover image path (do not hotlink platform thumbnails). */
+  cover: string;
+  coverAlt: string;
+  /** Exact video/reel URL (https only). */
+  url: string;
+  platform: "instagram" | "youtube" | "other";
+  order?: number;
+  /** Only published items appear publicly. */
+  published?: boolean;
+}
 export interface Testimonial {
   id: string;
   name: string;

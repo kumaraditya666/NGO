@@ -1,25 +1,27 @@
 import Link from "next/link";
 import Reveal from "@/components/Reveal";
 import GalleryClient from "@/components/GalleryClient";
-import { getPrograms, getCampaigns, getDonations, getEvents, getGallery } from "@/lib/content";
+import VideoStories from "@/components/VideoStories";
+import { getPrograms, getCampaigns, getDonations, getEvents, getGallery, getVideos } from "@/lib/content";
 
 export const dynamic = "force-dynamic";
 
 function Kicker({ children }: { children: React.ReactNode }) {
   return (
-    <p className="font-sans text-[12px] font-bold uppercase tracking-[0.22em] text-teal-700">
+    <p className="font-sans text-[12px] font-bold uppercase tracking-[0.22em] text-brand">
       {children}
     </p>
   );
 }
 
 export default async function Home() {
-  const [programs, campaigns, donations, events, gallery] = await Promise.all([
+  const [programs, campaigns, donations, events, gallery, videos] = await Promise.all([
     getPrograms(),
     getCampaigns(),
     getDonations(),
     getEvents(),
     getGallery(),
+    getVideos(),
   ]);
   const pub = programs.filter((p) => p.state === "published");
   const featured = campaigns.find((c) => c.publish === "published" && c.state === "active");
@@ -49,8 +51,8 @@ export default async function Home() {
           <div className="absolute inset-0">
             <div className="mx-auto max-w-[1240px] px-5 h-full flex items-end pb-16 md:pb-0 md:items-center md:justify-end">
               <div className="max-w-xl md:pr-6">
-                <p className="font-sans text-[12px] font-bold uppercase tracking-[0.24em] text-teal-300">
-                  Paaji · India
+                <p className="font-sans text-[12px] font-bold uppercase tracking-[0.24em] text-accent">
+                  Shikshaa Sewa · India
                 </p>
                 <h1 className="font-sans mt-3 font-extrabold text-white text-[2rem] md:text-6xl leading-[1.05]">
                   Together, we can
@@ -61,15 +63,18 @@ export default async function Home() {
                   A community-rooted nonprofit in India. Neighbours lead the work — and every
                   photograph here is from the team itself.
                 </p>
+                <p className="mt-2 font-sans italic text-white/75 text-[15px] md:text-base">
+                  Learn today, lead tomorrow.
+                </p>
                 <div className="mt-6">
                   <Link
                     href="/volunteer"
-                    className="inline-block rounded-md bg-teal-600 px-9 py-3.5 font-sans font-bold text-white hover:bg-teal-500 transition"
+                    className="inline-block rounded-md bg-accent px-9 py-3.5 font-sans font-bold text-ink hover:bg-accent-deep hover:text-white transition"
                   >
                     Become a Volunteer
                   </Link>
                   <div>
-                    <Link href="/programs" className="mt-3 inline-block font-sans text-sm font-semibold text-white underline underline-offset-4 hover:text-teal-200">
+                    <Link href="/programs" className="mt-3 inline-block font-sans text-sm font-semibold text-white underline underline-offset-4 hover:text-accent">
                       Explore Our Work →
                     </Link>
                   </div>
@@ -123,29 +128,29 @@ export default async function Home() {
         <Reveal>
           <div className="max-w-3xl">
             <Kicker>Who We Are</Kicker>
-            <h2 className="font-sans mt-2 font-extrabold text-slate-900 text-3xl md:text-4xl leading-tight">
+            <h2 className="font-sans mt-2 font-extrabold text-ink text-3xl md:text-4xl leading-tight">
               Neighbours helping neighbours.
             </h2>
             <p className="mt-4 text-slate-600 leading-relaxed">
-              Paaji is a community-rooted nonprofit in India. Our full profile — mission,
+              Shikshaa Sewa Charitable Trust is a community-rooted nonprofit in India. Our full profile — mission,
               service areas, team and registration — is being confirmed with the trustees and
               will appear here once approved. What you can already see is real: photographs
               from the field, and working ways to volunteer, pledge supplies, or write to us.
             </p>
             <div className="mt-5 flex flex-wrap gap-3">
-              <Link href="/about" className="font-sans font-bold text-teal-700 hover:text-teal-800">About us →</Link>
-              <Link href="/transparency" className="font-sans font-bold text-teal-700 hover:text-teal-800">How support is used →</Link>
+              <Link href="/about" className="font-sans font-bold text-brand hover:text-brand-dark">About us →</Link>
+              <Link href="/transparency" className="font-sans font-bold text-brand hover:text-brand-dark">How support is used →</Link>
             </div>
           </div>
         </Reveal>
       </section>
 
       {/* WAYS TO HELP */}
-      <section className="mt-14 md:mt-20 bg-slate-50 border-y border-slate-200">
+      <section className="mt-14 md:mt-20 bg-cream border-y border-slate-200">
         <div className="mx-auto max-w-[1240px] px-4 py-12 md:py-16">
           <Reveal>
             <Kicker>Ways to Help</Kicker>
-            <h2 className="font-sans mt-2 font-extrabold text-slate-900 text-3xl md:text-4xl">
+            <h2 className="font-sans mt-2 font-extrabold text-ink text-3xl md:text-4xl">
               Three ways to stand with us
             </h2>
             <p className="mt-3 text-slate-600 max-w-2xl">
@@ -165,9 +170,9 @@ export default async function Home() {
                     <img src={c.img} alt={c.alt} loading="lazy" className="h-44 w-full object-cover transition-transform duration-500 group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100" />
                   </span>
                   <span className="block p-5">
-                    <span className="font-sans font-bold text-lg text-slate-900">{c.t}</span>
+                    <span className="font-sans font-bold text-lg text-ink">{c.t}</span>
                     <span className="mt-1 block text-sm text-slate-600 leading-relaxed">{c.b}</span>
-                    <span className="mt-3 inline-block text-sm font-sans font-bold text-teal-700">{c.cta} →</span>
+                    <span className="mt-3 inline-block text-sm font-sans font-bold text-brand">{c.cta} →</span>
                   </span>
                 </Link>
               </Reveal>
@@ -181,7 +186,7 @@ export default async function Home() {
         <section className="mx-auto max-w-[1240px] px-4 pt-14 md:pt-20">
           <Reveal>
             <Kicker>Active Appeal</Kicker>
-            <h2 className="font-sans mt-2 font-extrabold text-slate-900 text-3xl md:text-4xl">{featured.title}</h2>
+            <h2 className="font-sans mt-2 font-extrabold text-ink text-3xl md:text-4xl">{featured.title}</h2>
           </Reveal>
           <div className="mt-6 grid gap-8 md:grid-cols-2 items-center">
             <Reveal>
@@ -193,7 +198,7 @@ export default async function Home() {
                 Ends {featured.deadline} · {onlineFor(featured.id) > 0 ? `₹${onlineFor(featured.id).toLocaleString("en-IN")} confirmed through this website so far.` : "No website gifts yet — progress shown live on the appeal page."}
               </p>
               <div className="mt-5 flex flex-wrap gap-3">
-                <Link href={`/campaigns/${featured.slug}`} className="rounded-md bg-teal-700 px-6 py-3 text-sm font-sans font-bold text-white hover:bg-teal-800 transition">View Appeal</Link>
+                <Link href={`/campaigns/${featured.slug}`} className="rounded-md bg-brand px-6 py-3 text-sm font-sans font-bold text-white hover:bg-brand-dark transition">View Appeal</Link>
                 <Link href="/support" className="rounded-md border border-slate-300 px-6 py-3 text-sm font-sans font-bold text-slate-800 hover:border-slate-500 transition">Other Ways to Help</Link>
               </div>
             </Reveal>
@@ -208,13 +213,13 @@ export default async function Home() {
             <div className="flex flex-wrap items-end justify-between gap-3">
               <div>
                 <Kicker>Gallery</Kicker>
-                <h2 className="font-sans mt-2 font-extrabold text-slate-900 text-3xl md:text-4xl">
+                <h2 className="font-sans mt-2 font-extrabold text-ink text-3xl md:text-4xl">
                   Moments from our work
                 </h2>
               </div>
               <Link
                 href="/gallery"
-                className="rounded-md bg-teal-700 px-5 py-2.5 font-sans text-sm font-bold text-white hover:bg-teal-800 transition"
+                className="rounded-md bg-brand px-5 py-2.5 font-sans text-sm font-bold text-white hover:bg-brand-dark transition"
               >
                 View Full Gallery
               </Link>
@@ -224,21 +229,39 @@ export default async function Home() {
         </section>
       )}
 
+      {/* STORIES FROM OUR WORK — only when approved videos with covers exist */}
+      {videos.length > 0 && (
+        <section className="mx-auto max-w-[1240px] px-4 pt-14 md:pt-20">
+          <Reveal>
+            <Kicker>Watch</Kicker>
+            <h2 className="font-sans mt-2 font-extrabold text-ink text-3xl md:text-4xl">
+              Stories from Our Work
+            </h2>
+            <p className="mt-3 text-slate-600 max-w-2xl">
+              Short videos and reels from the field. Each card opens the exact video in a new tab.
+            </p>
+          </Reveal>
+          <div className="mt-7">
+            <VideoStories items={videos} />
+          </div>
+        </section>
+      )}
+
       {/* UPCOMING EVENT — only if a genuine one is published */}
       {upcoming.length > 0 && (
         <section className="mx-auto max-w-[1240px] px-4 pt-14 md:pt-20">
           <Reveal>
             <Kicker>Gather</Kicker>
-            <h2 className="font-sans mt-2 font-extrabold text-slate-900 text-3xl md:text-4xl">Upcoming event</h2>
+            <h2 className="font-sans mt-2 font-extrabold text-ink text-3xl md:text-4xl">Upcoming event</h2>
           </Reveal>
           <div className="mt-6 grid gap-5 md:grid-cols-2">
             {upcoming.map((e) => (
               <Reveal key={e.id}>
                 <Link href="/events" className="block h-full rounded-lg border border-slate-200 bg-white p-6 hover:shadow-lg transition-shadow">
-                  <p className="font-sans text-[12px] font-bold uppercase tracking-[0.18em] text-teal-700">{e.date} · {e.time}</p>
-                  <h3 className="font-sans mt-1 font-bold text-xl text-slate-900">{e.title}</h3>
+                  <p className="font-sans text-[12px] font-bold uppercase tracking-[0.18em] text-brand">{e.date} · {e.time}</p>
+                  <h3 className="font-sans mt-1 font-bold text-xl text-ink">{e.title}</h3>
                   <p className="mt-1 text-sm text-slate-600">{e.location} · {e.registered}/{e.capacity} registered</p>
-                  <span className="mt-3 inline-block text-sm font-sans font-bold text-teal-700">Register →</span>
+                  <span className="mt-3 inline-block text-sm font-sans font-bold text-brand">Register →</span>
                 </Link>
               </Reveal>
             ))}
@@ -264,7 +287,7 @@ export default async function Home() {
               Reading circles, health-camp desks, plantation mornings — bring your
               hands and your heart.
             </p>
-            <Link href="/volunteer" className="mt-7 inline-block rounded-md bg-teal-600 px-9 py-3.5 font-sans font-bold text-white hover:bg-teal-500 transition">
+            <Link href="/volunteer" className="mt-7 inline-block rounded-md bg-brand px-9 py-3.5 font-sans font-bold text-white hover:bg-brand-dark transition">
               Become a Volunteer
             </Link>
           </Reveal>

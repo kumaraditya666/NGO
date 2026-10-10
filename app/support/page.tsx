@@ -21,9 +21,9 @@ export default function Support() {
         ].map((c, k) => (
           <Reveal key={c.t} delay={k * 80}>
             <div className="h-full rounded-xl border border-slate-200 bg-white p-6 flex flex-col">
-              <h2 className="font-sans font-bold text-xl text-slate-900">{c.t}</h2>
+              <h2 className="font-sans font-bold text-xl text-ink">{c.t}</h2>
               <p className="mt-2 text-slate-600 text-[15px] leading-relaxed flex-1">{c.b}</p>
-              <Link href={c.href} className="mt-4 inline-block rounded-md bg-teal-700 px-5 py-2.5 text-center font-sans text-sm font-bold text-white hover:bg-teal-800 transition">
+              <Link href={c.href} className="mt-4 inline-block rounded-md bg-brand px-5 py-2.5 text-center font-sans text-sm font-bold text-white hover:bg-brand-dark transition">
                 {c.cta}
               </Link>
             </div>
@@ -31,10 +31,10 @@ export default function Support() {
         ))}
       </div>
       <Reveal>
-        <p className="mt-8 rounded-xl bg-slate-50 border border-slate-200 p-5 text-sm text-slate-600">
+        <p className="mt-8 rounded-xl bg-cream border border-slate-200 p-5 text-sm text-slate-600">
           We will never ask for money through this page until verified payment details are published
           here by the NGO itself. If anyone asks you to pay on our behalf, treat it as fraud and{" "}
-          <Link href="/contact" className="font-bold text-teal-700 underline">tell us</Link>.
+          <Link href="/contact" className="font-bold text-brand underline">tell us</Link>.
         </p>
       </Reveal>
     </div>

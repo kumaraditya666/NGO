@@ -1,7 +1,9 @@
 import EnquiryForm from "@/components/EnquiryForm";
+import InstagramIcon from "@/components/InstagramIcon";
 import Reveal from "@/components/Reveal";
 import { SectionHeading } from "@/components/ui";
 import { readCollection } from "@/lib/store";
+import { siteConfig } from "@/lib/config";
 export const metadata = { title: "Contact" };
 export const dynamic = "force-dynamic";
 export default async function Contact() {
@@ -22,12 +24,12 @@ export default async function Contact() {
         <div className="rounded-xl border border-slate-200 bg-white p-6 text-[15px]">
           {hasDirect ? (
             <>
-              {address && <p><strong className="text-slate-900">Address</strong><br /><span className="text-slate-600">{address}</span></p>}
-              {hours && <p className="mt-2"><strong className="text-slate-900">Hours</strong><br /><span className="text-slate-600">{hours}</span></p>}
-              {email && <p className="mt-2"><strong className="text-slate-900">Email</strong><br /><a className="underline text-teal-700" href={`mailto:${email}`}>{email}</a></p>}
-              {phone && <p className="mt-2"><strong className="text-slate-900">Phone</strong><br /><a className="underline text-teal-700" href={`tel:${phone.replace(/[^+\d]/g, "")}`}>{phone}</a></p>}
+              {address && <p><strong className="text-ink">Address</strong><br /><span className="text-slate-600">{address}</span></p>}
+              {hours && <p className="mt-2"><strong className="text-ink">Hours</strong><br /><span className="text-slate-600">{hours}</span></p>}
+              {email && <p className="mt-2"><strong className="text-ink">Email</strong><br /><a className="underline text-brand" href={`mailto:${email}`}>{email}</a></p>}
+              {phone && <p className="mt-2"><strong className="text-ink">Phone</strong><br /><a className="underline text-brand" href={`tel:${phone.replace(/[^+\d]/g, "")}`}>{phone}</a></p>}
               <p className="mt-3 flex flex-wrap gap-2">
-                {phone && <a className="rounded-md bg-teal-700 text-white px-4 py-2 text-sm font-sans font-bold hover:bg-teal-800 transition" href={`tel:${phone.replace(/[^+\d]/g, "")}`}>Call</a>}
+                {phone && <a className="rounded-md bg-brand text-white px-4 py-2 text-sm font-sans font-bold hover:bg-brand-dark transition" href={`tel:${phone.replace(/[^+\d]/g, "")}`}>Call</a>}
                 {whatsapp && <a className="rounded-md border border-slate-300 px-4 py-2 text-sm font-sans font-bold text-slate-800 hover:border-slate-500 transition" target="_blank" href={`https://wa.me/${whatsapp}?text=${encodeURIComponent("Hello, I have a question.")}`}>WhatsApp</a>}
                 {mapUrl && <a className="rounded-md border border-slate-300 px-4 py-2 text-sm font-sans font-bold text-slate-800 hover:border-slate-500 transition" target="_blank" href={mapUrl}>Map</a>}
               </p>
@@ -39,9 +41,18 @@ export default async function Contact() {
             </p>
           )}
         </div>
-        <div className="rounded-xl border border-slate-200 bg-slate-50 p-6">
-          <h2 className="font-sans font-bold text-slate-900">Send a message</h2>
+        <div className="rounded-xl border border-slate-200 bg-cream p-6">
+          <h2 className="font-sans font-bold text-ink">Send a message</h2>
           <div className="mt-3"><EnquiryForm kind="contact" /></div>
+          <a
+            href={siteConfig.instagram}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-5 inline-flex items-center gap-2 rounded-md text-sm font-sans font-semibold text-brand hover:text-brand-dark transition focus-visible:outline-2 focus-visible:outline-brand"
+          >
+            <InstagramIcon size={19} />
+            Follow us on Instagram
+          </a>
         </div>
       </div>
     </div>

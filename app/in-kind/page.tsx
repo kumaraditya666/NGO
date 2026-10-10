@@ -17,7 +17,7 @@ export default async function InKind() {
         />
       </Reveal>
       <div className="mt-6 rounded-xl border border-slate-200 bg-white p-6">
-        <h2 className="font-sans font-bold text-xl text-slate-900">Needed right now</h2>
+        <h2 className="font-sans font-bold text-xl text-ink">Needed right now</h2>
         {items.length === 0 ? (
           <p className="mt-2 text-[15px] text-slate-600">
             The needs list is being confirmed with the team. You can still offer goods below —
@@ -33,7 +33,7 @@ export default async function InKind() {
             ))}
           </ul>
         )}
-        <div className="mt-4 text-sm bg-slate-50 border border-slate-200 rounded-xl p-4 text-slate-600">
+        <div className="mt-4 text-sm bg-cream border border-slate-200 rounded-xl p-4 text-slate-600">
           {settings.pickupEnabled
             ? "Pickup is offered in some areas — mention yours in the pledge and staff will confirm."
             : "Drop-off only for now — staff will share the drop point when they confirm your pledge."}

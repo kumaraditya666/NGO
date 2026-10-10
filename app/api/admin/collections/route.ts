@@ -3,7 +3,7 @@ import { requireApiRole } from "@/lib/guard";
 import { readCollection, writeCollection } from "@/lib/store";
 import { logAudit } from "@/lib/audit";
 
-const EDITOR_SETS = new Set(["programs", "campaigns", "campaign_updates", "events", "stories", "articles", "gallery", "testimonials", "team", "reports", "faqs", "opportunities", "inkind_items"]);
+const EDITOR_SETS = new Set(["programs", "campaigns", "campaign_updates", "events", "stories", "articles", "gallery", "videos", "testimonials", "team", "reports", "faqs", "opportunities", "inkind_items"]);
 const REVIEWER_SETS = new Set(["volunteers", "registrations", "enquiries", "inkind_pledges"]);
 
 export async function GET(req: Request) {

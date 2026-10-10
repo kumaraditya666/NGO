@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/Header";
+import TopBar from "@/components/TopBar";
 import Footer from "@/components/Footer";
 import DemoBanner from "@/components/DemoBanner";
 import { siteConfig } from "@/lib/config";
@@ -36,8 +37,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
       </head>
-      <body className="bg-ivory text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+      <body className="bg-ivory text-ink font-sans antialiased min-h-screen flex flex-col">
         <DemoBanner />
+        <TopBar />
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />

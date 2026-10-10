@@ -1,7 +1,7 @@
 import { readCollection } from "./store";
 import type {
   Program, Campaign, CampaignUpdate, Donation, NgoEvent, Story, GalleryItem,
-  Testimonial, TeamMember, Settings, VolunteerOpportunity,
+  Testimonial, TeamMember, Settings, VolunteerOpportunity, VideoItem,
 } from "./types";
 
 export async function getSettings(): Promise<Settings> {
@@ -29,6 +29,13 @@ export async function getGallery(): Promise<GalleryItem[]> {
   const all = await readCollection<GalleryItem[]>("gallery", []);
   return all
     .filter((g) => g.published !== false)
+    .sort((a, b) => (a.order ?? 0) - (b.order ?? 0) || a.id.localeCompare(b.id));
+}
+
+export async function getVideos(): Promise<VideoItem[]> {
+  const all = await readCollection<VideoItem[]>("videos", []);
+  return all
+    .filter((v) => v.published === true)
     .sort((a, b) => (a.order ?? 0) - (b.order ?? 0) || a.id.localeCompare(b.id));
 }
 export async function getTestimonials(): Promise<Testimonial[]> {

@@ -19,13 +19,13 @@ export default async function Transparency() {
         />
       </Reveal>
       <div className="mt-6 rounded-xl border border-slate-200 bg-white p-6 text-[15px] leading-relaxed text-slate-600">
-        <h2 className="font-sans font-bold text-xl text-slate-900">Legal identity</h2>
+        <h2 className="font-sans font-bold text-xl text-ink">Legal identity</h2>
         <p className="mt-2">
           {legal
             ? <>{legal} — registration documents appear below once approved for publication.</>
             : "The registered legal name and registration documents are being confirmed with the trustees and will be published here once approved."}
         </p>
-        <h2 className="font-sans font-bold text-xl text-slate-900 mt-6">How support is used</h2>
+        <h2 className="font-sans font-bold text-xl text-ink mt-6">How support is used</h2>
         <p className="mt-2">
           Money: online donations stay closed until the NGO&apos;s bank account is active and
           verified payment details are published. When open, only confirmed gifts count toward
@@ -35,15 +35,15 @@ export default async function Transparency() {
         </p>
         {docs.length > 0 ? (
           <>
-            <h2 className="font-sans font-bold text-xl text-slate-900 mt-6">Documents and reports</h2>
+            <h2 className="font-sans font-bold text-xl text-ink mt-6">Documents and reports</h2>
             <ul className="mt-2 space-y-1">
-              {docs.map((r: any) => <li key={r.id}><a className="underline text-teal-700" href={r.url}>{r.title}{r.year ? ` (${r.year})` : ""}</a></li>)}
+              {docs.map((r: any) => <li key={r.id}><a className="underline text-brand" href={r.url}>{r.title}{r.year ? ` (${r.year})` : ""}</a></li>)}
             </ul>
           </>
         ) : (
           <p className="mt-4 text-sm">
             No registration documents or reports published yet. When the NGO approves them,
-            they appear here. Questions? <Link href="/contact" className="underline text-teal-700 font-bold">Contact the team</Link>.
+            they appear here. Questions? <Link href="/contact" className="underline text-brand font-bold">Contact the team</Link>.
           </p>
         )}
       </div>

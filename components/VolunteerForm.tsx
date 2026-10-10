@@ -7,8 +7,8 @@ export default function VolunteerForm({ programs, events, opps }: any) {
   const set = (k: string, v: any) => setF({ ...f, [k]: v });
   const openRoles = (opps || []).filter((o: any) => o.open);
   if (ok) return (
-    <div className="rounded-xl border border-slate-200 bg-slate-50 p-8 text-center font-sans">
-      <p className="font-sans font-extrabold text-2xl text-slate-900">Thank you, {f.name.split(" ")[0] || "friend"}!</p>
+    <div className="rounded-xl border border-slate-200 bg-cream p-8 text-center font-sans">
+      <p className="font-sans font-extrabold text-2xl text-ink">Thank you, {f.name.split(" ")[0] || "friend"}!</p>
       <p className="mt-2 text-sm text-slate-600">{msg}</p>
     </div>
   );
@@ -32,10 +32,10 @@ export default function VolunteerForm({ programs, events, opps }: any) {
       <Field label="Message (optional)"><textarea className={inputCls} rows={4} value={f.message} onChange={(e) => set("message", e.target.value)} /></Field>
       <p className="text-[13px] text-slate-500">Only your name and one way to reach you (email or phone) are required.</p>
       <label className="text-sm flex gap-2 items-start text-slate-700"><input type="checkbox" required checked={f.consent} onChange={(e) => set("consent", e.target.checked)} className="mt-1" /> I consent to being contacted about volunteering. *</label>
-      <button className="rounded-md bg-teal-700 text-white px-6 py-3 font-sans font-bold hover:bg-teal-800 transition">Submit application</button>
+      <button className="rounded-md bg-brand text-white px-6 py-3 font-sans font-bold hover:bg-brand-dark transition">Submit application</button>
       {msg && <p className="text-sm text-slate-600" role="status">{msg}</p>}
       {openRoles.length > 0 && (
-        <div className="rounded-xl bg-slate-50 border border-slate-200 p-4 text-sm text-slate-700">
+        <div className="rounded-xl bg-cream border border-slate-200 p-4 text-sm text-slate-700">
           <strong>Open roles:</strong>{" "}
           {openRoles.map((o: any) => `${o.title} (${o.location}; ${o.commitment})`).join(" · ")}
         </div>

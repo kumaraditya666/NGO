@@ -4,8 +4,20 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        ivory: "#FBFAF6",
+        ivory: "#FFFCF7",
+        cream: "#FFFCF7",
         parchment: "#F4F1EA",
+        brand: {
+          DEFAULT: "#176A9A",
+          dark: "#12587F",
+          deep: "#0E4767",
+        },
+        accent: {
+          DEFAULT: "#F49A20",
+          deep: "#D97F0A",
+        },
+        leaf: "#60AD43",
+        ink: "#20313D",
         forest: {
           DEFAULT: "#1A2E1F",
           deep: "#122117",

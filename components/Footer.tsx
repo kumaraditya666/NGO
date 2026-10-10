@@ -1,9 +1,11 @@
 import Link from "next/link";
+import InstagramIcon from "@/components/InstagramIcon";
 import { readCollection } from "@/lib/store";
+import { siteConfig } from "@/lib/config";
 
 export default async function Footer() {
   const settings = await readCollection<any>("settings", {});
-  const name = settings.displayName || settings.ngoName || "Paaji";
+  const name = settings.displayName || settings.ngoName || siteConfig.name;
   const email = settings.contactEmail || "";
   const phone = settings.contactPhone || "";
   return (
@@ -11,29 +13,39 @@ export default async function Footer() {
       <div className="mx-auto max-w-[1240px] px-4 py-14 grid gap-10 md:grid-cols-4">
         <div>
           <p className="font-sans text-2xl font-extrabold">{name}</p>
+          <p className="mt-1 font-sans text-sm italic text-white/70">Learn today, lead tomorrow</p>
           <p className="mt-2 text-sm text-white/70">
-            A community-rooted nonprofit in India — education, health and livelihoods.
+            A community-rooted nonprofit in India.
           </p>
+          <a
+            href={siteConfig.instagram}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-4 inline-flex items-center gap-2 rounded-md text-sm font-sans font-semibold text-white hover:text-accent transition focus-visible:outline-2 focus-visible:outline-accent"
+          >
+            <InstagramIcon size={19} />
+            Follow us on Instagram
+          </a>
           {(email || phone) && (
             <p className="mt-4 text-sm">
               {email && (
-                <a className="underline hover:text-teal-200" href={`mailto:${email}`}>{email}</a>
+                <a className="underline hover:text-accent" href={`mailto:${email}`}>{email}</a>
               )}
               {email && phone && <br />}
               {phone && (
-                <a className="underline hover:text-teal-200" href={`tel:${phone.replace(/[^+\d]/g, "")}`}>{phone}</a>
+                <a className="underline hover:text-accent" href={`tel:${phone.replace(/[^+\d]/g, "")}`}>{phone}</a>
               )}
             </p>
           )}
           {!email && !phone && (
             <p className="mt-4 text-sm text-white/70">
               Direct contact details are being confirmed.{" "}
-              <Link href="/contact" className="underline hover:text-teal-200">Write to us here</Link>.
+              <Link href="/contact" className="underline hover:text-accent">Write to us here</Link>.
             </p>
           )}
         </div>
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-teal-300">Explore</p>
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">Explore</p>
           <ul className="mt-3 space-y-2 text-sm">
             <li><Link href="/about" className="hover:underline">About</Link></li>
             <li><Link href="/programs" className="hover:underline">Our Work</Link></li>
@@ -42,7 +54,7 @@ export default async function Footer() {
           </ul>
         </div>
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-teal-300">Get Involved</p>
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">Get Involved</p>
           <ul className="mt-3 space-y-2 text-sm">
             <li><Link href="/volunteer" className="hover:underline">Volunteer</Link></li>
             <li><Link href="/in-kind" className="hover:underline">Give Supplies</Link></li>
@@ -52,7 +64,7 @@ export default async function Footer() {
           </ul>
         </div>
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-teal-300">Trust</p>
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">Trust</p>
           <ul className="mt-3 space-y-2 text-sm">
             <li><Link href="/faq" className="hover:underline">FAQ</Link></li>
             <li><Link href="/privacy" className="hover:underline">Privacy</Link></li>

@@ -18,14 +18,14 @@ export default async function Campaigns() {
       </Reveal>
       {list.length === 0 ? (
         <Reveal>
-          <div className="mt-8 rounded-xl border border-slate-200 bg-slate-50 p-8 text-center">
-            <p className="font-sans font-bold text-lg text-slate-900">No active appeals right now</p>
+          <div className="mt-8 rounded-xl border border-slate-200 bg-cream p-8 text-center">
+            <p className="font-sans font-bold text-lg text-ink">No active appeals right now</p>
             <p className="mt-2 text-slate-600 max-w-xl mx-auto">
               Online donations are also still being set up. You can already volunteer,
               pledge supplies, or contact the team.
             </p>
             <div className="mt-5 flex flex-wrap justify-center gap-3">
-              <Link href="/support" className="rounded-md bg-teal-700 px-5 py-2.5 text-sm font-sans font-bold text-white hover:bg-teal-800 transition">Ways to Help</Link>
+              <Link href="/support" className="rounded-md bg-brand px-5 py-2.5 text-sm font-sans font-bold text-white hover:bg-brand-dark transition">Ways to Help</Link>
               <Link href="/gallery" className="rounded-md border border-slate-300 px-5 py-2.5 text-sm font-sans font-bold text-slate-800 hover:border-slate-500 transition">See the Work</Link>
             </div>
           </div>
@@ -39,7 +39,7 @@ export default async function Campaigns() {
                 <img src={c.image} alt={c.title} className="aspect-[16/8] w-full object-cover" loading="lazy" />
                 <div className="p-6">
                   <span className="font-sans text-[11px] font-bold uppercase tracking-widest rounded-full border border-slate-300 px-2 py-1 text-slate-600">{c.state}</span>
-                  <h2 className="font-sans font-bold text-2xl mt-2 text-slate-900">{c.title}</h2>
+                  <h2 className="font-sans font-bold text-2xl mt-2 text-ink">{c.title}</h2>
                   <p className="text-sm text-slate-600 mt-1">{c.summary}</p>
                   <div className="mt-3"><ProgressBar pct={(r.total / c.goalAmount) * 100} /></div>
                   <p className="text-sm mt-2 text-slate-700"><strong>{inr(r.total)}</strong> of {inr(c.goalAmount)} goal · deadline {c.deadline}</p>

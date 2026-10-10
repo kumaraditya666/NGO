@@ -45,7 +45,7 @@ export default function DonateFlow({ programs, campaigns, settings }: any) {
     <div>
       <ol className="flex gap-2 text-sm mt-6" aria-label="Donation steps">
         {["1 · Details", "2 · Pay", "3 · Confirm"].map((s, i) => (
-          <li key={s} className={`rounded-full border px-4 py-1.5 ${step === i + 1 ? "bg-teal-700 text-white" : "text-slate-500"}`}>{s}</li>
+          <li key={s} className={`rounded-full border px-4 py-1.5 ${step === i + 1 ? "bg-brand text-white" : "text-slate-500"}`}>{s}</li>
         ))}
       </ol>
 
@@ -61,14 +61,14 @@ export default function DonateFlow({ programs, campaigns, settings }: any) {
           </div>
           <div>
             <p className="text-sm font-medium">Amount (₹) *</p>
-            <div className="mt-2 flex flex-wrap gap-2">{AMOUNTS.map((a) => <button type="button" key={a} onClick={() => { set("amount", a); set("custom", ""); }} className={`rounded-full border px-4 py-2 text-sm ${!f.custom && f.amount === a ? "bg-teal-700 text-white" : ""}`}>₹{a.toLocaleString("en-IN")}</button>)}
+            <div className="mt-2 flex flex-wrap gap-2">{AMOUNTS.map((a) => <button type="button" key={a} onClick={() => { set("amount", a); set("custom", ""); }} className={`rounded-full border px-4 py-2 text-sm ${!f.custom && f.amount === a ? "bg-brand text-white" : ""}`}>₹{a.toLocaleString("en-IN")}</button>)}
               <input placeholder="Custom" inputMode="numeric" className="border rounded-full px-4 py-2 text-sm w-36" value={f.custom} onChange={(e) => set("custom", e.target.value.replace(/[^0-9]/g, ""))} /></div>
             <p className="text-xs text-slate-500 mt-1">Minimum ₹10. No online payment here — you pay in your own UPI/bank app next.</p>
           </div>
           <Field label="Message (optional)"><textarea rows={3} className={inputCls} value={f.message} onChange={(e) => set("message", e.target.value)} /></Field>
           <label className="text-sm flex gap-2"><input type="checkbox" checked={f.anonymous} onChange={(e) => set("anonymous", e.target.checked)} /> Keep my name private in public acknowledgements (internal records are still kept).</label>
           <label className="text-sm flex gap-2"><input type="checkbox" required checked={f.consent} onChange={(e) => set("consent", e.target.checked)} /> I consent to being contacted about this donation and understand verification is manual. *</label>
-          <button className="rounded-full bg-teal-700 text-white px-6 py-3 font-semibold">Continue to payment →</button>
+          <button className="rounded-full bg-brand text-white px-6 py-3 font-semibold">Continue to payment →</button>
           {msg && <p className="text-sm">{msg}</p>}
         </form>
       )}
@@ -79,25 +79,25 @@ export default function DonateFlow({ programs, campaigns, settings }: any) {
             <p className="text-sm">You are donating <strong className="font-sans font-extrabold text-2xl">₹{Number(created.amount).toLocaleString("en-IN")}</strong></p>
             <p className="text-sm mt-1">Reference: <strong>{created.reference}</strong> — write it in your payment note.</p>
             <div className="mt-4 rounded-2xl border p-4 text-center">
-              <p className="text-xs uppercase tracking-widest text-teal-700 font-semibold">Scan with any UPI app</p>
+              <p className="text-xs uppercase tracking-widest text-brand font-semibold">Scan with any UPI app</p>
               <img src={settings.qrImage} alt="UPI QR code" className="mx-auto mt-2 h-52 w-52 object-contain border rounded-xl" />
-              <a href={settings.qrImage} download className="text-sm underline text-teal-700">Download QR</a>
+              <a href={settings.qrImage} download className="text-sm underline text-brand">Download QR</a>
             </div>
             <div className="mt-4 space-y-2 text-sm">
               {[["UPI ID", settings.upiId], ["Account holder", settings.accountHolder], ["Bank", settings.bankName], ["Account number", settings.accountNumber], ["IFSC", settings.ifsc]].map(([k, val]) => (
-                <div key={k} className="flex items-center justify-between gap-2 border-b py-1.5"><span className="text-slate-500">{k}: <strong className="text-slate-900">{val}</strong></span><button type="button" onClick={() => copy(String(val))} className="rounded-full border px-3 py-1 text-xs">Copy</button></div>
+                <div key={k} className="flex items-center justify-between gap-2 border-b py-1.5"><span className="text-slate-500">{k}: <strong className="text-ink">{val}</strong></span><button type="button" onClick={() => copy(String(val))} className="rounded-full border px-3 py-1 text-xs">Copy</button></div>
               ))}
             </div>
             <p className="mt-3 text-[13px] bg-amber-50 border border-amber-200 rounded-xl p-3">⚠️ In your payment app, verify the recipient name matches <strong>{settings.accountHolder}</strong> before paying. Opening an app or scanning never counts as success — only a staff-verified credit does.</p>
           </div>
-          <form onSubmit={submitProof} className="rounded-3xl border bg-slate-50 p-6 grid gap-3 content-start">
+          <form onSubmit={submitProof} className="rounded-3xl border bg-cream p-6 grid gap-3 content-start">
             <h2 className="font-sans font-bold text-xl">Step 3: submit payment reference</h2>
             <Field label="UTR / transaction reference * (or tick below if you can't find it)" hint="12-digit UTR for UPI/NEFT; check payment history."><input required={!v.cannotFindRef} className={inputCls} value={v.utr} onChange={(e) => setV({ ...v, utr: e.target.value })} placeholder="e.g. 412345678901" /></Field>
             <Field label="Payment date *"><input required type="date" className={inputCls} value={v.paidAt} onChange={(e) => setV({ ...v, paidAt: e.target.value })} /></Field>
             <Field label="Screenshot (optional, JPG/PNG/PDF ≤ 5MB)"><input type="file" accept=".jpg,.jpeg,.png,.pdf" className={inputCls} onChange={(e) => setV({ ...v, proof: e.target.files?.[0] || null })} /></Field>
             <Field label="Note (optional)"><input className={inputCls} value={v.note} onChange={(e) => setV({ ...v, note: e.target.value })} /></Field>
             <label className="text-sm flex gap-2"><input type="checkbox" checked={v.cannotFindRef} onChange={(e) => setV({ ...v, cannotFindRef: e.target.checked })} /> I paid but cannot find the reference — please help trace it.</label>
-            <button className="rounded-full bg-teal-700 text-white px-6 py-3 font-semibold">Submit for verification</button>
+            <button className="rounded-full bg-brand text-white px-6 py-3 font-semibold">Submit for verification</button>
             {msg && <p className="text-sm">{msg}</p>}
           </form>
         </div>
@@ -109,7 +109,7 @@ export default function DonateFlow({ programs, campaigns, settings }: any) {
           <p className="mt-2 text-ivory/80">Reference <strong>{created.reference}</strong> · Amount ₹{Number(created.amount).toLocaleString("en-IN")}</p>
           <p className="mt-2 text-sm text-white/70">Confirmation comes only after staff match the credit. Keep this link private:</p>
           <p className="mt-2 text-sm break-all bg-white/10 rounded-xl p-3">/donate/status?ref={created.reference}&token={created.token}</p>
-          <div className="mt-4 flex justify-center gap-2"><a className="rounded-full bg-white text-slate-900 px-5 py-2 text-sm font-semibold" href={`/donate/status?ref=${created.reference}&token=${created.token}`}>Check status</a><a className="rounded-full border border-white/40 px-5 py-2 text-sm" href="/">Home</a></div>
+          <div className="mt-4 flex justify-center gap-2"><a className="rounded-full bg-white text-ink px-5 py-2 text-sm font-semibold" href={`/donate/status?ref=${created.reference}&token=${created.token}`}>Check status</a><a className="rounded-full border border-white/40 px-5 py-2 text-sm" href="/">Home</a></div>
           <p className="mt-3 text-xs text-white/60">Questions? Ask us via the Contact page. If you cannot find your UTR, staff will still review your note.</p>
         </div>
       )}

@@ -72,7 +72,7 @@ export default function GalleryClient({
           <button
             onClick={() => { setCat(""); setIndex(null); }}
             aria-pressed={cat === ""}
-            className={`rounded-full border px-4 py-1.5 text-sm font-sans ${!cat ? "bg-teal-700 text-white border-teal-700" : "border-slate-300 text-slate-700"}`}
+            className={`rounded-full border px-4 py-1.5 text-sm font-sans ${!cat ? "bg-brand text-white border-brand" : "border-slate-300 text-slate-700"}`}
           >
             All
           </button>
@@ -81,7 +81,7 @@ export default function GalleryClient({
               key={c}
               onClick={() => { setCat(c); setIndex(null); }}
               aria-pressed={cat === c}
-              className={`rounded-full border px-4 py-1.5 text-sm font-sans ${cat === c ? "bg-teal-700 text-white border-teal-700" : "border-slate-300 text-slate-700"}`}
+              className={`rounded-full border px-4 py-1.5 text-sm font-sans ${cat === c ? "bg-brand text-white border-brand" : "border-slate-300 text-slate-700"}`}
             >
               {c}
             </button>
@@ -159,7 +159,7 @@ export default function GalleryClient({
                   ref={closeRef}
                   onClick={close}
                   aria-label="Close photo viewer"
-                  className="h-11 px-5 rounded-full bg-white text-slate-900 font-sans text-sm font-bold hover:bg-slate-200 transition"
+                  className="h-11 px-5 rounded-full bg-white text-ink font-sans text-sm font-bold hover:bg-slate-200 transition"
                 >
                   Close
                 </button>

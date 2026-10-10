@@ -1,9 +1,11 @@
 export const siteConfig = {
-  name: process.env.NEXT_PUBLIC_SITE_NAME || "Paaji",
-  tagline: "Hope, rooted in community",
+  name: process.env.NEXT_PUBLIC_SITE_NAME || "Shikshaa Sewa Charitable Trust",
+  shortName: process.env.NEXT_PUBLIC_SITE_SHORT_NAME || "Shikshaa Sewa",
+  tagline: "Learn today, lead tomorrow",
   description:
-    "A community-rooted NGO working on education, health, livelihoods and environment. Donate by UPI or bank transfer with manual verification.",
+    "Shikshaa Sewa Charitable Trust — a community-rooted nonprofit in India. Volunteer, pledge supplies, or get in touch.",
   url: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
+  instagram: "https://www.instagram.com/shikshaasewa_charitabletrust/",
   location: process.env.NEXT_PUBLIC_LOCATION || "India",
   email: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "hello@example.org",
   phone: process.env.NEXT_PUBLIC_CONTACT_PHONE || "+91-00000-00000",

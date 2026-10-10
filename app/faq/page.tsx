@@ -11,7 +11,7 @@ export default async function Faq() {
       <div className="mt-6 space-y-3">
         {faqs.map((f: any) => (
           <details key={f.id} className="rounded-xl border border-slate-200 bg-white p-5">
-            <summary className="font-sans font-bold cursor-pointer text-slate-900">{f.q}</summary>
+            <summary className="font-sans font-bold cursor-pointer text-ink">{f.q}</summary>
             <p className="text-sm text-slate-600 mt-2 leading-relaxed">{f.a}</p>
           </details>
         ))}
