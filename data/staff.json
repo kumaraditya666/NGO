@@ -1,1 +1,11 @@
-[]
+[
+  {
+    "id": "staff_admin",
+    "email": "admin@example.org",
+    "name": "Administrator",
+    "role": "administrator",
+    "salt": "17c14a6e12b14891f22d64f62ca07ca5",
+    "hash": "a998265913f06f360534010f675e10db99c39c6cfff5638c575123006a66daf2e59a1cf8b0b67f4f18862dc4275e56fa03052fe461e5cce090ac3359558d8fea",
+    "createdAt": "2026-10-10T12:40:21.581Z"
+  }
+]

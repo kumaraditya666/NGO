@@ -19,12 +19,17 @@ export default function AdminLoginForm({ next }: { next?: string }) {
     if (busy) return;
     setBusy(true);
     setMsg("Signing in…");
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 20000);
     try {
-      const res = await fetch("/api/auth/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(f) });
-      const j = await res.json();
-      if (!res.ok) { setMsg(j.error); return; }
+      const res = await fetch("/api/auth/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(f), signal: ctrl.signal });
+      const j = await res.json().catch(() => ({}));
+      if (!res.ok) { setMsg(j.error || "Sign-in failed. Please try again."); return; }
       location.href = next || "/admin/dashboard";
+    } catch {
+      setMsg("Could not reach the server. Make sure it is running (npm run dev), then refresh this page and try again.");
     } finally {
+      clearTimeout(timer);
       setBusy(false);
     }
   }
