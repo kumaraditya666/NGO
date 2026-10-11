@@ -39,7 +39,7 @@ export default async function Home() {
   const storySmall2 = find("g-e95bd356-9b9a-48a8-800c-998976db2963");
 
   return (
-    <div className="bg-cream font-sans overflow-x-clip">
+    <div className="bg-cream font-sans overflow-x-clip flush-footer">
       {/* MAGAZINE HERO — cream, blue headline, photo collage */}
       <section className="relative overflow-hidden" aria-label="Introduction">
         <div className="mx-auto max-w-[1240px] px-4 pt-10 pb-12 md:pt-16 md:pb-20 grid gap-10 md:grid-cols-2 md:items-center">
