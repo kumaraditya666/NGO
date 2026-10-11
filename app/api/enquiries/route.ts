@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { enquirySchema } from "@/lib/validation";
 import { readCollection, writeCollection, uid } from "@/lib/store";
 import { rateLimit } from "@/lib/rate-limit";
-import { adminRecipient, enqueueNotify, processOutbox, siteBase, inboxLink, esc } from "@/lib/notify";
+import { adminRecipient, enqueueNotify, processOutbox, siteBase, inboxLink, esc, brandMail } from "@/lib/notify";
 
 const KIND_LABEL: Record<string, string> = {
   contact: "contact enquiry",
@@ -43,13 +43,30 @@ export async function POST(req: Request) {
     try {
       const label = KIND_LABEL[p.data.kind] || "enquiry";
       const admin = await adminRecipient();
+      const reviewUrl = `${siteBase()}${inboxLink(p.data.kind)}`;
+      const detail = (k: string, value: string) =>
+        `<p style="margin:6px 0;"><span style="color:#5b6b76;">${k}:</span> <strong>${value || "—"}</strong></p>`;
       await enqueueNotify({
         purpose: "admin-notify",
         refKind: p.data.kind,
         refId: rec.id,
         to: admin,
         subject: `New ${label} — Shikshaa Sewa (${rec.id})`,
-        html: `<p>New ${label} on ${now}.</p><p><b>${esc(p.data.name)}</b> · ${esc(p.data.email)}${p.data.phone ? ` · ${esc(p.data.phone)}` : ""}</p>${p.data.subject ? `<p>Subject: ${esc(p.data.subject)}</p>` : ""}<p>${esc((p.data.message || "").slice(0, 500))}</p><p>Review: <a href="${siteBase()}${inboxLink(p.data.kind)}">${siteBase()}${inboxLink(p.data.kind)}</a></p>`,
+        html: brandMail({
+          preheader: `New ${label} from ${p.data.name}`,
+          heading: `New ${label}`,
+          body:
+            `<p style="margin:0 0 8px 0;">A new ${esc(label)} arrived on the website and is waiting in the inbox.</p>` +
+            detail("Name", esc(p.data.name)) +
+            detail("Email", esc(p.data.email)) +
+            detail("Phone", esc(p.data.phone)) +
+            (p.data.subject ? detail("Subject", esc(p.data.subject)) : "") +
+            (p.data.message ? `<p style="margin:10px 0 0 0;padding:10px 12px;background:#FFFCF7;border-left:3px solid #F49A20;">${esc(p.data.message.slice(0, 500))}</p>` : "") +
+            `<p style="margin:10px 0 0 0;color:#5b6b76;font-size:13px;">Reference: ${esc(rec.id)}</p>`,
+          ctaLabel: "Review message",
+          ctaHref: reviewUrl,
+          note: "Reply to this email to write directly to the sender.",
+        }),
         text: `New ${label} (${rec.id}) on ${now}.\n${p.data.name} · ${p.data.email}\n${(p.data.message || "").slice(0, 500)}\nReview: ${siteBase()}${inboxLink(p.data.kind)}`,
         replyTo: p.data.email,
       });
@@ -59,7 +76,14 @@ export async function POST(req: Request) {
         refId: rec.id,
         to: p.data.email,
         subject: "We received your message — Shikshaa Sewa",
-          html: `<p>Hi ${esc(p.data.name)},</p><p>Thanks for writing — your message (${rec.id}) is saved and we reply within 3 working days.</p>`,
+        html: brandMail({
+          preheader: "Your message is saved",
+          heading: `Thanks, ${esc(p.data.name)}`,
+          body:
+            `<p style="margin:0 0 8px 0;">Thanks for writing — your message is saved and we reply within 3 working days.</p>` +
+            `<p style="margin:0;color:#5b6b76;font-size:13px;">Your reference: ${esc(rec.id)}</p>`,
+          note: "You received this because you wrote to us through our website.",
+        }),
         text: `Hi ${p.data.name}, thanks for writing — your message (${rec.id}) is saved and we reply within 3 working days.`,
       });
       await processOutbox();
