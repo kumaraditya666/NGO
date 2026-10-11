@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { requireApiRole } from "@/lib/guard";
 import { readCollection } from "@/lib/store";
-import { emailConfigured, isDemoMode } from "@/lib/config";
+import { backendStatus } from "@/lib/store";
+import { emailConfigured } from "@/lib/config";
 
 export async function GET(req: Request) {
   const g = requireApiRole(req, ["editor", "reviewer"]);
@@ -21,6 +22,7 @@ export async function GET(req: Request) {
     readCollection<any[]>("outbox", []),
   ]);
   const failedMail = outbox.filter((m: any) => m.status === "failed").length;
+  const db = await backendStatus().catch(() => ({ backend: "json", detail: "Status check failed." }));
   const pub = (a: any[], k: string) => a.filter((x) => (x[k] || "draft") !== "draft").length;
   const draft = (a: any[], k: string) => a.filter((x) => (x[k] || "draft") === "draft").length;
   const groups = [
@@ -55,7 +57,7 @@ export async function GET(req: Request) {
         { label: "Online donations enabled (staff decision)", done: settings.donationsEnabled === true, hint: "Server-enforced; keep OFF until the bank account is active" },
         { label: "Verified payment details published", done: Boolean((settings.upiId || "").trim() && (settings.accountNumber || "").trim()), hint: "Never show samples publicly" },
         { label: "Active appeal published", done: pub(campaigns, "publish") > 0, hint: `${draft(campaigns, "publish")} in draft` },
-        { label: "Supabase connected (persistent data)", done: !isDemoMode, hint: isDemoMode ? "Local JSON store — wiped on redeploy" : "Connected" },
+        { label: "Supabase connected (persistent data)", done: db.backend === "supabase", hint: db.detail },
         { label: "Transactional email configured", done: emailConfigured, hint: emailConfigured ? "Notifications send via outbox" : "Outbox records failures; forms still save" },
         { label: "Admin notification recipient set", done: Boolean(((settings.adminNotificationEmail || process.env.ADMIN_NOTIFICATION_EMAIL || "") as string).trim()), hint: "Settings > adminNotificationEmail or ADMIN_NOTIFICATION_EMAIL env" },
         { label: "No failed notification emails", done: failedMail === 0, hint: failedMail ? `${failedMail} failed — see Admin > Notifications` : "Outbox clear" },

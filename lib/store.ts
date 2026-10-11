@@ -15,6 +15,23 @@ export function backendFor(name: string): "supabase" | "json" {
   return "json";
 }
 
+/**
+ * Staff-safe database health summary (no secrets, no row data). Used by the
+ * admin checklist to show exactly why Supabase reads/writes succeed or fail.
+ */
+export async function backendStatus(): Promise<{ backend: string; detail: string }> {
+  const sb = getSupabaseAdmin();
+  if (!sb) return { backend: "json", detail: "Supabase URL/key not set — using local JSON files." };
+  try {
+    const { error } = await sb.from("volunteers").select("id").limit(1);
+    if (error) throw error;
+    return { backend: "supabase", detail: "Connected — submissions read/write Postgres." };
+  } catch (e: any) {
+    const msg = String(e?.message || e).slice(0, 160);
+    return { backend: "supabase-error", detail: `Configured but failing (${msg}). Check the service_role key and that migrations 001-004 ran.` };
+  }
+}
+
 function missingTable(e: any): boolean {
   const msg = String(e?.message || e) + " " + String(e?.code || "");
   return /42P01|relation .* does not exist|Could not find the table/i.test(msg);
