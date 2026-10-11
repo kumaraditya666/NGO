@@ -44,7 +44,7 @@ unpublished pending the exact registered information — do not guess.
 - [ ] Phone numbers visible on some banners/signage in photos — confirm all may publish
 
 ## Integrations
-- [ ] Supabase (migrations `001`–`005` in `supabase/migrations/`) for persistent data
+- [ ] Supabase (migrations `001`-`005` in `supabase/migrations/`) for persistent data
 - [ ] Resend: `RESEND_API_KEY` + verified sender domain for `EMAIL_FROM` (SMTP_* fallback only)
 - [ ] Staff notification recipient: `ADMIN_NOTIFICATION_EMAIL` env or Settings > adminNotificationEmail
 - [ ] `APP_URL` (= canonical live URL, used for admin links in emails)
