@@ -236,6 +236,8 @@ export interface Settings {
   tagline: string;
   contactEmail: string;
   contactPhone: string;
+  /** Extra public phone numbers, shown alongside contactPhone. */
+  contactPhones?: string[];
   whatsapp: string;
   address: string;
   hours: string;
