@@ -62,7 +62,8 @@ export async function POST(req: Request) {
       console.error("[notify] registration notification failed (registration saved):", e);
     }
     return NextResponse.json({ message: "Registered", registered: ev.registered, capacity: ev.capacity });
-  } catch {
+  } catch (e) {
+    console.error("[register-debug]", e);
     return NextResponse.json({ error: "Registration could not be saved right now. Please try again." }, { status: 500 });
   }
 }

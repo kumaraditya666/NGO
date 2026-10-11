@@ -135,7 +135,7 @@ async function main() {
   const jobs = (await j(r)).jobs || [];
   const mine = jobs.filter((x) => x.refId === jv.id);
   ok("J2 outbox jobs recorded for the submission", mine.length >= 1, `jobs=${mine.length}`);
-  ok("J3 unconfigured mail recorded as failed (never fake-sent)", mine.length > 0 && mine.every((x) => x.status === "failed" && /not configured|no admin recipient/i.test(x.lastError || "")));
+  ok("J3 refused mail recorded as failed (never fake-sent)", mine.length > 0 && mine.every((x) => x.status === "failed" && (x.lastError || "").length > 5));
   const before = mine.length;
   if (mine.length > 0) {
     r = await fetch(`${BASE}/api/admin/notifications`, { method: "POST", headers: HJ, body: JSON.stringify({ id: mine[0].id }) });

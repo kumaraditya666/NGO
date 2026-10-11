@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import Reveal from "@/components/Reveal";
 import VideoStories from "@/components/VideoStories";
 import ProgramIcon from "@/components/ProgramIcon";
@@ -76,12 +77,16 @@ export default async function Home() {
             <SunRays aria-hidden className="absolute -top-8 -right-4 w-28 md:w-36 opacity-90 pointer-events-none" />
             <div className="relative">
               {heroMain && (
-                <img
-                  src={heroMain.thumb || heroMain.image}
-                  alt={heroMain.alt}
-                  loading="eager"
-                  className="enter-photo-main rounded-2xl border-[6px] border-white shadow-[0_24px_50px_-20px_rgba(23,106,154,0.45)] w-full aspect-[4/3] object-cover"
-                />
+                <span className="enter-photo-main block relative rounded-2xl border-[6px] border-white shadow-[0_24px_50px_-20px_rgba(23,106,154,0.45)] w-full aspect-[4/3] overflow-hidden">
+                  <Image
+                    src={heroMain.thumb || heroMain.image}
+                    alt={heroMain.alt}
+                    fill
+                    priority
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover"
+                  />
+                </span>
               )}
               {heroSmall1 && (
                 <img

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import Reveal from "@/components/Reveal";
 import ProgramIcon from "@/components/ProgramIcon";
 import { OrangeStroke, BookCurve } from "@/components/Accents";
@@ -43,12 +44,16 @@ export default async function About() {
           </Reveal>
         </div>
         <Reveal delay={120} className="order-2">
-          <img
-            src="/images/gallery/large/f178b8e9-d772-4d48-8e81-fec77195ed39.jpg"
-            alt="Eight volunteers posing outdoors with an Indian flag behind them"
-            loading="eager"
-            className="rounded-2xl border-[6px] border-white shadow-[0_24px_50px_-20px_rgba(23,106,154,0.45)] w-full aspect-[4/3] object-cover"
-          />
+          <span className="block relative rounded-2xl border-[6px] border-white shadow-[0_24px_50px_-20px_rgba(23,106,154,0.45)] w-full aspect-[4/3] overflow-hidden">
+            <Image
+              src="/images/gallery/large/f178b8e9-d772-4d48-8e81-fec77195ed39.jpg"
+              alt="Eight volunteers posing outdoors with an Indian flag behind them"
+              fill
+              priority
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover"
+            />
+          </span>
         </Reveal>
       </section>
 

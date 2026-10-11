@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -48,9 +49,12 @@ export default function Header() {
     <header className="enter-header sticky top-0 z-40 bg-white border-b border-slate-200">
       <div className="mx-auto max-w-[1240px] px-4 flex items-center justify-between h-[68px] gap-4">
         <Link href="/" className="flex items-center gap-2.5 shrink-0" aria-label="Shikshaa Sewa Charitable Trust — home">
-          <img
-            src="/logo.png"
+          <Image
+            src="/logo.jpg"
             alt="Shikshaa Sewa Charitable Trust"
+            width={100}
+            height={89}
+            priority
             className="h-11 w-auto rounded-sm bg-white"
           />
           <span className="leading-tight">
@@ -124,7 +128,7 @@ export default function Header() {
               {l.label}
             </Link>
           ))}
-          <p className="pt-3 pb-1 text-[12px] font-sans font-bold uppercase tracking-widest text-slate-400">Get Involved</p>
+          <p className="pt-3 pb-1 text-[12px] font-sans font-bold uppercase tracking-widest text-slate-500">Get Involved</p>
           {involved.map((l) => (
             <Link
               key={l.href}
