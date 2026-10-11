@@ -37,7 +37,7 @@ unpublished pending the exact registered information — do not guess.
 
 ## Photography (gallery live with 13 client photos)
 - [x] 13 client photos published with factual alt text, no captions invented
-- [ ] `public/logo.png` saved from the supplied logo file (header wired, favicon pending)
+- [x] Client logo live as `public/logo.jpg` (cropped, 39KB) + `app/icon.png` favicon from its symbol
 - [ ] Individual video/reel URLs + uploaded cover images (`data/videos.json` is empty, section hidden)
 - [ ] Consent records for every recognisable person
 - [ ] Replace/extend with programme, hero and event photos as approved
