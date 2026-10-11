@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { volunteerSchema } from "@/lib/validation";
 import { readCollection, writeCollection, uid } from "@/lib/store";
 import { rateLimit } from "@/lib/rate-limit";
-import { adminRecipient, enqueueNotify, processOutbox, siteBase, inboxLink, esc } from "@/lib/notify";
+import { adminRecipient, enqueueNotify, processOutbox, siteBase, inboxLink, esc, brandMail } from "@/lib/notify";
 
 export async function POST(req: Request) {
   if (!rateLimit("vol:" + (req.headers.get("x-forwarded-for") || "a"), 10)) return NextResponse.json({ error: "Too many requests" }, { status: 429 });
@@ -32,13 +32,32 @@ export async function POST(req: Request) {
     try {
       const email = (p.data.email || "").trim();
       const admin = await adminRecipient();
+      const reviewUrl = `${siteBase()}${inboxLink("volunteers")}`;
+      const detail = (label: string, value: string) =>
+        `<p style="margin:6px 0;"><span style="color:#5b6b76;">${label}:</span> <strong>${value || "—"}</strong></p>`;
       await enqueueNotify({
         purpose: "admin-notify",
         refKind: "volunteers",
         refId: rec.id,
         to: admin,
         subject: `New volunteer application — Shikshaa Sewa (${rec.id})`,
-        html: `<p>New volunteer application on ${now}.</p><p><b>${esc(p.data.name)}</b> · ${esc(p.data.email) || "no email"} · ${esc(p.data.phone) || "no phone"} · ${esc(p.data.location) || "no area"}</p><p>Interests: ${esc(p.data.interests) || "—"}</p><p>Availability: ${esc(p.data.availability) || "—"}</p><p>Review: <a href="${siteBase()}${inboxLink("volunteers")}">${siteBase()}${inboxLink("volunteers")}</a></p>`,
+        html: brandMail({
+          preheader: `New volunteer application from ${p.data.name}`,
+          heading: "New volunteer application",
+          body:
+            `<p style="margin:0 0 8px 0;">A new application arrived on the website and is waiting in the inbox.</p>` +
+            detail("Name", esc(p.data.name)) +
+            detail("Email", esc(p.data.email) || "no email") +
+            detail("Phone", esc(p.data.phone) || "no phone") +
+            detail("Area", esc(p.data.location) || "no area") +
+            detail("Interests", esc(p.data.interests)) +
+            detail("Availability", esc(p.data.availability)) +
+            (p.data.message ? `<p style="margin:10px 0 0 0;padding:10px 12px;background:#FFFCF7;border-left:3px solid #F49A20;">${esc(p.data.message)}</p>` : "") +
+            `<p style="margin:10px 0 0 0;color:#5b6b76;font-size:13px;">Reference: ${esc(rec.id)}</p>`,
+          ctaLabel: "Review application",
+          ctaHref: reviewUrl,
+          note: "Reply to this email to write directly to the applicant.",
+        }),
         text: `New volunteer application (${rec.id}) on ${now}.\n${p.data.name} · ${p.data.email || "no email"} · ${p.data.phone || "no phone"}\nReview: ${siteBase()}${inboxLink("volunteers")}`,
         replyTo: (p.data.email || "").trim() || undefined,
       });
@@ -49,7 +68,14 @@ export async function POST(req: Request) {
           refId: rec.id,
           to: email,
           subject: "Volunteer application received — Shikshaa Sewa",
-          html: `<p>Hi ${esc(p.data.name)},</p><p>Thanks — your application (${rec.id}) is saved and our team reviews every application by hand.</p>`,
+          html: brandMail({
+            preheader: "Your volunteer application is saved",
+            heading: `Thanks, ${esc(p.data.name)}`,
+            body:
+              `<p style="margin:0 0 8px 0;">Your volunteer application is saved. Our team reads every application by hand and will be in touch.</p>` +
+              `<p style="margin:0;color:#5b6b76;font-size:13px;">Your reference: ${esc(rec.id)}</p>`,
+            note: "You received this because you submitted a volunteer application on our website.",
+          }),
           text: `Hi ${p.data.name}, thanks — your application (${rec.id}) is saved and our team reviews every application by hand.`,
         });
       }
