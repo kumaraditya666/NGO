@@ -7,7 +7,8 @@
 - **Users**: General public (donors-to-be, volunteers, community), NGO staff (admin panel with roles).
 - **Outcome expected**: Client-ready prototype that is honest everywhere (no invented figures/stories/registrations), deployable to Vercel, backed by Supabase when credentials exist.
 - **Repo**: `C:\Users\Adi\OneDrive\paaji` (local) → GitHub `mauryakirti2308-ctrl/NGO` branch `main` (transferred from `kumaraditya666/NGO`; remote already repointed). Live (possibly stale): https://shikshasewa.vercel.app/
-- **Local HEAD at handoff**: `efb6e87` ("Lighthouse fixes…") — verify with `git log --oneline -3` and `git status`.
+- **Local HEAD at handoff**: `bc646c6` (handoff docs; includes Lighthouse fixes `efb6e87`) — tree clean, `origin/main` in sync. Verify with `git log --oneline -3` and `git status`.
+- **Deployment (Oct 2026)**: repo transferred to `mauryakirti2308-ctrl/NGO`, killing Vercel auto-deploy. User is re-importing as a new Vercel project. Live https://shikshasewa.vercel.app/ confirmed STALE (pre-Lighthouse: `<title>Paaji…`, plain `<img>` gallery, old build ID) — needs fresh deploy + verification.
 
 ## 2. REQUIREMENTS & PREFERENCES (user's, consolidated; latest wins)
 - Design: warm cream `#FFFCF7`, brand blue `#176A9A`, orange accent `#F49A20`, green `#60AD43` restrained, ink text `#20313D`, navy `#0f2a43` panels; Fraunces serif display + Inter body; rounded-lg cards; subtle motion only; **reduced-motion respected everywhere**; no purple gradients/glassmorphism/3D.
@@ -85,12 +86,32 @@
 - Unresolved: favicon refinement, Hindi switch (hidden), Razorpay (future), custom domain for Resend sender.
 
 ## 9. NEXT STEPS (priority order)
-1. **Immediate**: user finishes Vercel import (env list already given) → get live URL → verify live (hero, gallery, forms, admin login, donations-locked, no console errors).
-2. Set production env on Vercel (Supabase URL+service key, `NEXT_PUBLIC_DEMO_MODE=false`, Resend key, verified `EMAIL_FROM`, `ADMIN_NOTIFICATION_EMAIL`, `APP_URL`, `SESSION_SECRET`, strong `ADMIN_PASSWORD`) + redeploy; re-verify forms persist to Supabase.
+1. **Immediate**: user finishes Vercel import (env table below) → get live URL → verify live (hero, gallery, forms, admin login, donations-locked, no console errors).
+2. Set production env on Vercel + redeploy; re-verify forms persist to Supabase.
 3. Resend: verify sender domain; test end-to-end delivery.
 4. Collect: video URLs+covers, programme details, impact figures, team, events, supply needs, legal/contact details (CONTENT-CHECKLIST.md).
 5. Re-run Lighthouse on live URL; confirm 90+ Performance / 100 Accessibility.
 6. Ongoing: keep test data out of commits; `git push` only on explicit approval.
+
+## 12. PRODUCTION ENV VARS (complete — for the Vercel import screen)
+Set each for all three environments (Production + Preview + Development):
+| Variable | Value / source |
+|---|---|
+| `NEXT_PUBLIC_SITE_NAME` | `Shikshaa Sewa Charitable Trust` |
+| `NEXT_PUBLIC_SITE_URL` | live URL (deploy once, then set + redeploy) |
+| `NEXT_PUBLIC_DEMO_MODE` | `false` (Supabase is wired) |
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase → Settings → API → Project URL |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase → Settings → API → service_role key (secret, never commit/share) |
+| `SESSION_SECRET` | long random string, 32+ chars (generated for user before — reuse or regenerate) |
+| `ADMIN_EMAIL` | `admin@example.org` |
+| `ADMIN_PASSWORD` | strong password set by user (generated one given before) |
+| `ADMIN_NOTIFICATION_EMAIL` | `adi853062@gmail.com` |
+| `RESEND_API_KEY` | Resend dashboard (API key copied at signup) |
+| `EMAIL_FROM` | verified sender, e.g. `Shikshaa Sewa <hello@verified-domain>` (needs domain verification in Resend) |
+| `APP_URL` | same as live URL (admin links inside emails) |
+| `SMTP_HOST/PORT/USER/PASS/FROM` | optional fallback only; skip unless Resend unavailable |
+| `CRON_SECRET` | random string (generated before; for `/api/cron/outbox` scheduler) |
+| `NEXT_PUBLIC_UPI_ID` | leave empty (donations locked) |
 
 ## 10. RULES FOR THE NEXT AI
 - Continue from repo state (`git log`, `git status` first); don't rebuild working features.
@@ -107,7 +128,7 @@ I'm continuing work on the **Shikshaa Sewa Charitable Trust NGO website** (Next.
 
 **Done:** full public site (magazine homepage, About with approved content, 5 published initiatives, gallery with 13 real photos + lightbox, volunteer/contact/supply/event forms), donations 503-locked with manual-verify flow ready, role-based admin (login/reset, inbox with search/CSV/notes, donations queue, gallery+video managers, settings, audit, launch checklist), email outbox (Resend→SMTP, bounded retries, honest failures), Supabase adapter (JSON fallback; migrations 001–005), branding (blue/orange, logo.jpg, Instagram links), Lighthouse fixes committed.
 
-**Current state:** local HEAD has everything through Lighthouse fixes; last push may predate them. Vercel auto-deploy broke after the repo transferred accounts — user is re-importing the project; deployment status unknown. `PROJECT_CONTEXT.md` in the repo root is the source of truth, but **inspect actual project files (`git log`, `git status`, key routes) before acting**, as state may have moved.
+**Current state:** local HEAD `bc646c6` (handoff docs, includes Lighthouse fixes), pushed — `origin/main` in sync, tree clean. Live https://shikshasewa.vercel.app/ verified STALE (pre-Lighthouse build: `<title>Paaji…`, plain `<img>` gallery) — Vercel auto-deploy died with the repo transfer; user is importing fresh under the new account. `PROJECT_CONTEXT.md` in the repo root is the source of truth, but **inspect actual project files (`git log`, `git status`, key routes) before acting**, as state may have moved.
 
 **Immediate next action:** confirm what Vercel shows (new deployment Ready/failed/absent) and verify the live site, or finish the Vercel import with the env list in context. Requirements that never change: no invented NGO facts, drafts stay private, reduced-motion respected, push/deploy only on my explicit word, be honest about anything unverifiable.
 ---
