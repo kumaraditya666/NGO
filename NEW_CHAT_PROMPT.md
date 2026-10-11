@@ -1,0 +1,7 @@
+I'm continuing work on the **Shikshaa Sewa Charitable Trust NGO website** (Next.js 14 + TypeScript + Tailwind, repo at `C:\Users\Adi\OneDrive\paaji`, GitHub `mauryakirti2308-ctrl/NGO` branch `main`, live at `https://shikshasewa.vercel.app/`).
+
+**Done:** full public site (magazine homepage, About with approved content, 5 published initiatives, gallery with 13 real photos + lightbox, volunteer/contact/supply/event forms), donations 503-locked with manual-verify flow ready, role-based admin (login/reset, inbox with search/CSV/notes, donations queue, gallery+video managers, settings, audit, launch checklist), email outbox (Resend→SMTP, bounded retries, honest failures), Supabase adapter (JSON fallback; migrations 001–005), branding (blue/orange, logo.jpg, Instagram links), Lighthouse fixes committed.
+
+**Current state:** local HEAD has everything through Lighthouse fixes; last push may predate them. Vercel auto-deploy broke after the repo transferred accounts — user is re-importing the project; deployment status unknown. `PROJECT_CONTEXT.md` in the repo root is the source of truth, but **inspect actual project files (`git log`, `git status`, key routes) before acting**, as state may have moved.
+
+**Immediate next action:** confirm what Vercel shows (new deployment Ready/failed/absent) and verify the live site, or finish the Vercel import with the env list in context. Requirements that never change: no invented NGO facts, drafts stay private, reduced-motion respected, push/deploy only on my explicit word, be honest about anything unverifiable.
